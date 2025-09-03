@@ -1,8 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.androidx.room)
 }
+
+
 
 android {
     namespace = "com.example.money_manager"
@@ -34,14 +40,53 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        compose = true
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodule.compose)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.compose.foundation)
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    implementation(libs.androidx.sqlite.bundled)
+    ksp(libs.room.compiler)
+
+    implementation(libs.coroutines.android)
+    implementation(libs.coroutines.core)
+
+    implementation(libs.datastore.preferences)
+
+    implementation(libs.kotlin.serialization)
+
+    debugImplementation(libs.androidx.ui.tooling)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
