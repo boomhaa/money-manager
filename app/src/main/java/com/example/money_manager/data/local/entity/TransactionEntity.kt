@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.money_manager.utils.TransactionType
 
 @Entity(
     tableName = "transactions",
@@ -27,7 +28,3 @@ data class TransactionEntity(
     val timestamp: Long = System.currentTimeMillis()
 )
 
-enum class TransactionType {
-    INCOME,
-    EXPENSE
-}

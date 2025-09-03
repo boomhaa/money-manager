@@ -1,14 +1,57 @@
 package com.example.money_manager.data.local.database
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.money_manager.data.local.dao.CategoryDao
 import com.example.money_manager.data.local.dao.TransactionDao
 import com.example.money_manager.data.local.entity.CategoryEntity
 import com.example.money_manager.data.local.entity.TransactionEntity
+import com.example.money_manager.utils.DefaultCategories
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Database(entities = [TransactionEntity::class, CategoryEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
+
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "money_manager.db"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
+
+    class DatabaseCallback(
+        private val context: Context
+    ) : Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val database = getInstance(context)
+                addDefaultCategories(database.categoryDao())
+            }
+        }
+
+        private suspend fun addDefaultCategories(categoryDao: CategoryDao) {
+            val defaultCategories = DefaultCategories.getAllCategories()
+            categoryDao.insertListCategories(defaultCategories)
+        }
+    }
+
     abstract fun categoryDao(): CategoryDao
     abstract fun transactionDao(): TransactionDao
 }
