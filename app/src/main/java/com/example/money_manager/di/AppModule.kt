@@ -2,12 +2,20 @@ package com.example.money_manager.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.money_manager.data.local.dao.CategoryDao
+import com.example.money_manager.data.local.dao.TransactionDao
 import com.example.money_manager.data.local.database.AppDatabase
+import com.example.money_manager.data.local.entity.CategoryEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -17,22 +25,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(
-        @ApplicationContext context: Context
-    ): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "money_manager.db"
-        ).build()
-    }
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
+        AppDatabase.getInstance(context)
 
     @Provides
-    @Singleton
-    fun provideCategoryDao(db: AppDatabase) = db.categoryDao()
+    fun provideCategoryDao(db: AppDatabase): CategoryDao = db.categoryDao()
 
     @Provides
-    @Singleton
-    fun provideTransactionDao(db: AppDatabase) = db.transactionDao()
+    fun provideTransactionDao(db: AppDatabase): TransactionDao = db.transactionDao()
 
 }
