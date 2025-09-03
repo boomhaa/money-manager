@@ -1,0 +1,61 @@
+[versions]
+agp = "8.11.1"
+kotlin = "2.2.10"
+coreKtx = "1.17.0"
+lifecycle = "2.9.3"
+activityCompose = "1.10.1"
+junit = "4.13.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+appcompat = "1.7.1"
+material = "1.12.0"
+material3 = "1.9.0"
+composeBom = "2025.08.01"
+composeUi = "1.9.0"
+composeFoundation = "1.9.0"
+navigation = "2.9.3"
+hilt = "2.57.1"
+room = "2.7.2"
+datastore = "1.1.7"
+coroutines = "1.10.2"
+serialization = "1.7.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+lifecycle-runtime = {module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle"}
+lyfecycle-viewmodel-compose = {module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle"}
+activity-compose = {module = "androidx.activity:activity-compose", version.ref = "activityCompose"}
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+compose-bom = {module = "androidx.compose:compose-bom", version.ref = "composeBom"}
+compose-ui = {module = "androidx.compose.ui:ui", version.ref = "composeUi"}
+compose-ui-tooling = {module = "androidx.compose.ui:ui-tooling", version.ref = "composeUi"}
+compose-foundation = {module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation"}
+material3 = {module = "androidx.compose.material3:material3", version.ref = "material3"}
+navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navigation"}
+
+hilt-android = {module = "com.google.dagger:hilt-android", version.ref = "hilt"}
+hilt-compiler = {module = "com.google.dagger:hilt-compiler", version.ref = "hilt"}
+
+room-runtime = {module = "androidx.room:room-runtime", version.ref = "room"}
+room-ktx = {module = "androidx.room:room-ktx", version.ref = "room"}
+room-compiler = {module = "androidx.room:room-compiler", version.ref = "room"}
+
+coroutines-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
+coroutines-android = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines"}
+
+datastore-preferences = {module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+
+kotlin-serialization = {module = "org.jetbrains.kotlinx:kotlix-serialization-json", version.ref = "serialization"}
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt = {id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+kotlin-seralization = {id = "org.jetbrains.kotlin.plugin.seralization", version.ref = "kotlin"}
+
