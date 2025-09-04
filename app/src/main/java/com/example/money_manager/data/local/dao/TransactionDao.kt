@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.money_manager.data.local.entity.TransactionEntity
+import com.example.money_manager.utils.TransactionType
 import kotlinx.coroutines.flow.Flow
 
 interface TransactionDao {
@@ -24,4 +25,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
     suspend fun getTransactionById(id: Long): TransactionEntity
+
+    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
+    suspend fun getTransactionsByType(type: TransactionType): Flow<List<TransactionEntity>>
 }
