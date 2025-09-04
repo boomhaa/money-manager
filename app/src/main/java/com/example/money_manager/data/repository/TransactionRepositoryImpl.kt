@@ -6,6 +6,7 @@ import com.example.money_manager.data.mapper.toTransactionEntity
 import com.example.money_manager.data.mapper.toTransactionList
 import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.repository.TransactionRepository
+import com.example.money_manager.utils.TransactionType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,6 +22,10 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionDao.getTransactionById(id).toTransaction()
     }
 
+    override suspend fun getTransactionsByType(type: TransactionType): Flow<List<Transaction>> {
+        return transactionDao.getTransactionsByType(type).map { it.toTransactionList() }
+    }
+
     override suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction.toTransactionEntity())
     }
@@ -32,5 +37,4 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun deleteTransaction(transaction: Transaction) {
         transactionDao.deleteTransaction(transaction.toTransactionEntity())
     }
-
 }
