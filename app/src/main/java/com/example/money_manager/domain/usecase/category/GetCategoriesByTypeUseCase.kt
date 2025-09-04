@@ -7,7 +7,7 @@ import com.example.money_manager.utils.TransactionType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetCategoriesByType @Inject constructor(
+class GetCategoriesByTypeUseCase @Inject constructor(
     private val repository: CategoryRepository
 ): FLowUseCase<TransactionType, List<Category>> {
     override suspend fun invoke(params: TransactionType): Flow<List<Category>> {

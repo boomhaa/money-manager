@@ -5,7 +5,7 @@ import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.usecase.UseCase
 import javax.inject.Inject
 
-class GetCategoryById @Inject constructor(
+class GetCategoryByIdUseCase @Inject constructor(
     private val repository: CategoryRepository
 ): UseCase<Long, Category> {
     override suspend fun invoke(params: Long): Category {
