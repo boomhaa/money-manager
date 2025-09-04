@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetAllTransactionsUseCase @Inject constructor(
     private val repository: TransactionRepository
 ): NoParamFlowUseCase<List<Transaction>> {
-    override suspend fun invoke(): Flow<List<Transaction>> {
+    override fun invoke(): Flow<List<Transaction>> {
         return repository.getAllTransactions()
     }
 }

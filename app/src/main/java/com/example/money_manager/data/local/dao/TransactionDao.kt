@@ -1,5 +1,6 @@
 package com.example.money_manager.data.local.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,6 +10,7 @@ import com.example.money_manager.data.local.entity.TransactionEntity
 import com.example.money_manager.utils.TransactionType
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface TransactionDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,11 +23,11 @@ interface TransactionDao {
     suspend fun deleteTransaction(transaction: TransactionEntity)
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
-    suspend fun getAllTransactions(): Flow<List<TransactionEntity>>
+    fun getAllTransactions(): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
     suspend fun getTransactionById(id: Long): TransactionEntity
 
     @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
-    suspend fun getTransactionsByType(type: TransactionType): Flow<List<TransactionEntity>>
+    fun getTransactionsByType(type: TransactionType): Flow<List<TransactionEntity>>
 }

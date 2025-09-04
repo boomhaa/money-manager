@@ -14,7 +14,7 @@ import javax.inject.Inject
 class CategoryRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao
 ) : CategoryRepository{
-    override suspend fun getAllCategories(): Flow<List<Category>> {
+    override fun getAllCategories(): Flow<List<Category>> {
         return categoryDao.getAllCategories().map { it.toCategoryList() }
     }
 
@@ -22,7 +22,7 @@ class CategoryRepositoryImpl @Inject constructor(
         return categoryDao.getCategoryById(id).toCategory()
     }
 
-    override suspend fun getCategoriesByType(type: TransactionType): Flow<List<Category>> {
+    override fun getCategoriesByType(type: TransactionType): Flow<List<Category>> {
         return categoryDao.getCategoriesByType(type).map { it.toCategoryList() }
     }
 
