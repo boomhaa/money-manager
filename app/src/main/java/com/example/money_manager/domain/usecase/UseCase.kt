@@ -7,7 +7,7 @@ interface UseCase<in P, out R> {
 }
 
 interface FLowUseCase<in P, out R> {
-    suspend operator fun invoke(params: P): Flow<R>
+    operator fun invoke(params: P): Flow<R>
 }
 
 interface NoParamUseCase<out R> {
@@ -15,5 +15,5 @@ interface NoParamUseCase<out R> {
 }
 
 interface NoParamFlowUseCase<out R> {
-    suspend operator fun invoke(): Flow<R>
+    operator fun invoke(): Flow<R>
 }

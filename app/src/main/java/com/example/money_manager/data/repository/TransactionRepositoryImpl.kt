@@ -14,7 +14,7 @@ import javax.inject.Inject
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao
 ): TransactionRepository{
-    override suspend fun getAllTransactions(): Flow<List<Transaction>> {
+    override fun getAllTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransactions().map { it.toTransactionList() }
     }
 
@@ -22,7 +22,7 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionDao.getTransactionById(id).toTransaction()
     }
 
-    override suspend fun getTransactionsByType(type: TransactionType): Flow<List<Transaction>> {
+    override fun getTransactionsByType(type: TransactionType): Flow<List<Transaction>> {
         return transactionDao.getTransactionsByType(type).map { it.toTransactionList() }
     }
 

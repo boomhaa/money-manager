@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetAllCategoriesUseCase @Inject constructor(
     private val repository: CategoryRepository
 ): NoParamFlowUseCase<List<Category>> {
-    override suspend fun invoke(): Flow<List<Category>> {
+    override fun invoke(): Flow<List<Category>> {
         return repository.getAllCategories()
     }
 }

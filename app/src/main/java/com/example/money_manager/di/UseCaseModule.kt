@@ -95,7 +95,4 @@ object UseCaseModule {
     fun provideDeleteCategoryUseCase(repository: CategoryRepository): DeleteCategoryUseCase{
         return DeleteCategoryUseCase(repository)
     }
-
-
-
 }

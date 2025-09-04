@@ -10,7 +10,7 @@ import javax.inject.Inject
 class GetTransactionsByTypeUseCase @Inject constructor(
     private val repository: TransactionRepository
 ): FLowUseCase<TransactionType, List<Transaction>> {
-    override suspend fun invoke(params: TransactionType): Flow<List<Transaction>> {
+    override fun invoke(params: TransactionType): Flow<List<Transaction>> {
         return repository.getTransactionsByType(params)
     }
 }

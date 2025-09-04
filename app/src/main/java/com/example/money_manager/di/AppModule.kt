@@ -1,24 +1,18 @@
 package com.example.money_manager.di
 
 import android.content.Context
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.money_manager.data.local.dao.CategoryDao
 import com.example.money_manager.data.local.dao.TransactionDao
 import com.example.money_manager.data.local.database.AppDatabase
-import com.example.money_manager.data.local.entity.CategoryEntity
 import com.example.money_manager.data.repository.CategoryRepositoryImpl
 import com.example.money_manager.data.repository.TransactionRepositoryImpl
+import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.TransactionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -40,7 +34,7 @@ object AppModule {
     @Singleton
     fun provideCategoryRepository(
         categoryDao: CategoryDao
-    ): CategoryRepositoryImpl {
+    ): CategoryRepository {
         return CategoryRepositoryImpl(categoryDao = categoryDao)
     }
 
@@ -51,5 +45,4 @@ object AppModule {
     ): TransactionRepository {
         return TransactionRepositoryImpl(transactionDao = transactionDao)
     }
-
 }
