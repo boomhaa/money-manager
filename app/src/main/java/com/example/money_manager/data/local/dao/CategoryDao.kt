@@ -33,4 +33,7 @@ interface CategoryDao {
 
     @Query("SELECT * FROM categories WHERE type = :type ORDER BY name ASC")
     fun getCategoriesByType(type: TransactionType): Flow<List<CategoryEntity>>
+
+    @Query("SELECT COUNT(*) FROM categories")
+    suspend fun getCount(): Int
 }

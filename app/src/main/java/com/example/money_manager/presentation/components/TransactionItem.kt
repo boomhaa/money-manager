@@ -21,7 +21,7 @@ fun TransactionItem(
 
     val transaction = item.transaction
     val category = item.category
-    val formattedDate = transaction.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+    val formattedDate = transaction.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 
     Box(
         modifier = Modifier

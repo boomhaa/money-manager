@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.money_manager.presentation.ui.screens.addtransactionscreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homescreen.HomeScreen
 
 @Composable
@@ -15,6 +16,8 @@ fun AppNavigation(){
         composable(Screens.Home.route) {
             HomeScreen(navController)
         }
-
+        composable(Screens.AddTransaction.route) {
+            AddTransactionScreen(navController)
+        }
     }
 }
