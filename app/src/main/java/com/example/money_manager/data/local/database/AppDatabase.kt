@@ -27,7 +27,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "money_manager.db"
-                ).build()
+                )
+                    .addCallback(DatabaseCallback(context))
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -37,7 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
     class DatabaseCallback(
         private val context: Context
     ) : Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
+        override fun onOpen(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -46,9 +48,13 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+
         private suspend fun addDefaultCategories(categoryDao: CategoryDao) {
-            val defaultCategories = DefaultCategories.getAllCategories()
-            categoryDao.insertListCategories(defaultCategories)
+            val count = categoryDao.getCount()
+            if (count == 0) {
+                val defaultCategories = DefaultCategories.getAllCategories()
+                categoryDao.insertListCategories(defaultCategories)
+            }
         }
     }
 
