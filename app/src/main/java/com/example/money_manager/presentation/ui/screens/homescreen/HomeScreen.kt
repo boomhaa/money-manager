@@ -80,7 +80,7 @@ fun HomeScreen(
                                 TransactionItem(
                                     item = item,
                                     onEdit = { id ->
-                                        navController.navigate("EditTransaction/$id")
+                                        navController.navigate("editTransaction/$id")
                                     },
                                     onDelete = { id ->
                                         viewModel.deleteTransaction(transaction = item.transaction)
