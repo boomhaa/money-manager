@@ -16,12 +16,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.money_manager.presentation.components.BalanceSummary
 import com.example.money_manager.presentation.components.TransactionItem
+import com.example.money_manager.presentation.navigation.Screens
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -80,7 +82,7 @@ fun HomeScreen(
                                 TransactionItem(
                                     item = item,
                                     onEdit = { id ->
-                                        navController.navigate("editTransaction/$id")
+                                        navController.navigate(Screens.EditTransaction.createRoute(id))
                                     },
                                     onDelete = { id ->
                                         viewModel.deleteTransaction(transaction = item.transaction)
