@@ -1,4 +1,4 @@
-package com.example.money_manager.presentation.ui.screens.edittransactionscreen
+package com.example.money_manager.presentation.ui.screens.editTransactionScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +35,7 @@ import com.example.money_manager.presentation.components.AmountTextField
 import com.example.money_manager.presentation.components.CategoryDropdown
 import com.example.money_manager.presentation.components.DatePickerField
 import com.example.money_manager.presentation.components.TransactionTypeSelector
-import com.example.money_manager.presentation.viewmodel.EditTransactionViewModel
+import com.example.money_manager.presentation.viewmodel.edittransactionviewmodel.EditTransactionViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,7 +116,8 @@ fun EditTransactionScreen(
                     selectedCategory = uiState.value.selectedCategory,
                     onCategorySelected = viewModel::onCategoryChange,
                     modifier = Modifier.fillMaxWidth(),
-                    transactionType = uiState.value.transactionType
+                    transactionType = uiState.value.transactionType,
+                    navController = navController
                 )
 
                 DatePickerField(

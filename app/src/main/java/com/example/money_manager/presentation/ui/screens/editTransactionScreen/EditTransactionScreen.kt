@@ -1,6 +1,4 @@
-
-
-package com.example.money_manager.presentation.ui.screens.edittransactionscreen
+package com.example.money_manager.presentation.ui.screens.editTransactionScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
