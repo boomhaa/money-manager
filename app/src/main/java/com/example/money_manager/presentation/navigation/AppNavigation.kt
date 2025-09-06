@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
-import com.example.money_manager.presentation.ui.screens.edittransactionscreen.EditTransactionScreen
+import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 
 @Composable
