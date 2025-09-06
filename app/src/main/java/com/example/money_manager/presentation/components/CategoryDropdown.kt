@@ -14,7 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.example.money_manager.domain.model.Category
+import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.utils.TransactionType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +26,8 @@ fun CategoryDropdown(
     selectedCategory: Category?,
     onCategorySelected: (Category) -> Unit,
     modifier: Modifier = Modifier,
-    transactionType: TransactionType
+    transactionType: TransactionType,
+    navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
     val filteredCategories = categories.filter { it.type == transactionType }
@@ -58,6 +61,13 @@ fun CategoryDropdown(
                     }
                 )
             }
+            DropdownMenuItem(
+                text = { Text("➕ Добавить категорию")},
+                onClick = {
+                    navController.navigate(Screens.AddCategory.route)
+                    expanded = false
+                }
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.example.money_manager.domain.model
+package com.example.money_manager.presentation.viewmodel.addtransactionviewmodel
 
+import com.example.money_manager.domain.model.Category
 import com.example.money_manager.utils.TransactionType
 import java.time.LocalDateTime
 

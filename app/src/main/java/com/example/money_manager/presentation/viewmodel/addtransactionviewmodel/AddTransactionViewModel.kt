@@ -1,12 +1,11 @@
-package com.example.money_manager.presentation.viewmodel
+package com.example.money_manager.presentation.viewmodel.addtransactionviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.money_manager.domain.model.AddTransactionUiState
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.model.Transaction
-import com.example.money_manager.domain.usecase.transaction.InsertTransactionUseCase
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.transaction.InsertTransactionUseCase
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
-    private val addTransactionUseCase: InsertTransactionUseCase,
+    private val insertTransactionUseCase: InsertTransactionUseCase,
     private val getCategoriesUseCase: GetAllCategoriesUseCase
 ) : ViewModel() {
 
@@ -71,7 +70,7 @@ class AddTransactionViewModel @Inject constructor(
                         description = _uiState.value.description.ifEmpty { null }
                     )
 
-                    addTransactionUseCase(transaction)
+                    insertTransactionUseCase(transaction)
                     _uiState.value = _uiState.value.copy(isSuccess = true)
                 } else {
                     _uiState.value = _uiState.value.copy(error = "Заполните все поля")

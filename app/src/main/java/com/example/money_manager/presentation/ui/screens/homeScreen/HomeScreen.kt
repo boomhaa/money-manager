@@ -1,4 +1,4 @@
-package com.example.money_manager.presentation.ui.screens.homescreen
+package com.example.money_manager.presentation.ui.screens.homeScreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,17 +11,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.money_manager.presentation.viewmodel.HomeViewModel
+import com.example.money_manager.presentation.viewmodel.homeviewmodel.HomeViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.money_manager.presentation.components.BalanceSummary
 import com.example.money_manager.presentation.components.TransactionItem
+import com.example.money_manager.presentation.navigation.Screens
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -80,7 +82,7 @@ fun HomeScreen(
                                 TransactionItem(
                                     item = item,
                                     onEdit = { id ->
-                                        navController.navigate("editTransaction/$id")
+                                        navController.navigate(Screens.EditTransaction.createRoute(id))
                                     },
                                     onDelete = { id ->
                                         viewModel.deleteTransaction(transaction = item.transaction)

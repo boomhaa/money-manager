@@ -1,8 +1,7 @@
-package com.example.money_manager.presentation.viewmodel
+package com.example.money_manager.presentation.viewmodel.homeviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.money_manager.domain.model.HomeUiState
 import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.domain.model.TransactionsSummary
@@ -11,7 +10,9 @@ import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUse
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -30,6 +30,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<String>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     init {
         observerTransactions()
@@ -47,14 +50,19 @@ class HomeViewModel @Inject constructor(
                 }
 
                 val totalIncome = transactions
-                        .filter { it.type == TransactionType.INCOME }
-                        .sumOf { it.amount }
+                    .filter { it.type == TransactionType.INCOME }
+                    .sumOf { it.amount }
                 val totalExpense = transactions
-                        .filter { it.type == TransactionType.EXPENSE }
-                        .sumOf { it.amount }
+                    .filter { it.type == TransactionType.EXPENSE }
+                    .sumOf { it.amount }
                 val totalBalance = totalIncome - totalExpense
 
-                TransactionsSummary(transactionWithCategory, totalIncome, totalExpense, totalBalance)
+                TransactionsSummary(
+                    transactionWithCategory,
+                    totalIncome,
+                    totalExpense,
+                    totalBalance
+                )
             }
                 .onStart { _uiState.update { it.copy(isLoading = true) } }
                 .catch { error ->
