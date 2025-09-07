@@ -9,5 +9,4 @@ sealed class Screens(val route: String) {
         }
     }
     object AddCategory: Screens("addCategory")
-    object Statistics : Screens("statistics")
 }

@@ -10,7 +10,6 @@ import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCa
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
-import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
 
 @Composable
 fun AppNavigation() {
@@ -41,10 +40,6 @@ fun AppNavigation() {
 
         composable(Screens.AddCategory.route) {
             AddCategoryScreen(navController)
-        }
-
-        composable(Screens.Statistics.route) {
-            StatisticsScreen(navController)
         }
     }
 }

@@ -75,8 +75,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material)
     implementation(libs.androidx.compose.foundation)
+
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.charts.compose)
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
