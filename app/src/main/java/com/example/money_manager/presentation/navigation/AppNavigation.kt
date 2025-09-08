@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
+import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
 import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
@@ -28,10 +29,12 @@ fun AppNavigation() {
             AddTransactionScreen(navController)
         }
 
-        composable(route = Screens.EditTransaction.route,
+        composable(
+            route = Screens.EditTransaction.route,
             arguments = listOf(navArgument("transactionId") {
                 type = NavType.LongType
-            })) { backStackEntry ->
+            })
+        ) { backStackEntry ->
             val transactionId = backStackEntry.arguments?.getLong("transactionId") ?: 0L
             EditTransactionScreen(
                 navController = navController,
@@ -40,11 +43,15 @@ fun AppNavigation() {
         }
 
         composable(Screens.AddCategory.route) {
-            AddCategoryScreen(navController)
+            AddCategoryScreen(navController = navController)
         }
 
         composable(Screens.Statistics.route) {
-            StatisticsScreen(navController)
+            StatisticsScreen(navController = navController)
+        }
+
+        composable(Screens.Categories.route) {
+            CategoriesScreen(navController = navController)
         }
     }
 }
