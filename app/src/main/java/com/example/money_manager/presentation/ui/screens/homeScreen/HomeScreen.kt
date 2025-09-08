@@ -47,7 +47,16 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate("statistics")
+                        navController.navigate(Screens.Statistics.route)
+                    }
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Категории") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        navController.navigate(Screens.Categories.route)
                     }
                 )
             }
