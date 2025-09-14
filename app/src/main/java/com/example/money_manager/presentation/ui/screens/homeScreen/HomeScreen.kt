@@ -16,8 +16,10 @@ import com.example.money_manager.presentation.viewmodel.homeviewmodel.HomeViewMo
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.money_manager.presentation.components.BalanceSummary
+import com.example.money_manager.presentation.components.BurgerMenu
 import com.example.money_manager.presentation.components.TransactionItem
 import com.example.money_manager.presentation.navigation.Screens
+import com.example.money_manager.utils.ScreenMenuList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,38 +32,12 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-
-    ModalNavigationDrawer(
+    BurgerMenu(
+        navController = navController,
         drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(modifier = Modifier.width(240.dp)) {
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = "Меню",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
-                )
-
-                NavigationDrawerItem(
-                    label = { Text("Статистика") },
-                    selected = false,
-                    onClick = {
-                        scope.launch { drawerState.close() }
-                        navController.navigate(Screens.Statistics.route)
-                    }
-                )
-
-                NavigationDrawerItem(
-                    label = { Text("Категории") },
-                    selected = false,
-                    onClick = {
-                        scope.launch { drawerState.close() }
-                        navController.navigate(Screens.Categories.route)
-                    }
-                )
-            }
-        }
-    ) {
+        menuItems = ScreenMenuList.screenMenuList
+    )
+     {
         Scaffold(
             topBar = {
                 TopAppBar(title = { Text("Финансовый учет") },
