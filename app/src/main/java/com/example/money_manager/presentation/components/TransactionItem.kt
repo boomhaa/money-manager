@@ -1,16 +1,28 @@
 package com.example.money_manager.presentation.components
 
-import androidx.compose.foundation.clickable
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.money_manager.domain.model.TransactionWithCategory
+import com.example.money_manager.presentation.theme.Success500
+import com.example.money_manager.presentation.theme.Error500
 import com.example.money_manager.utils.TransactionType
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun TransactionItem(
     item: TransactionWithCategory,
@@ -21,72 +33,158 @@ fun TransactionItem(
 
     val transaction = item.transaction
     val category = item.category
-    val formattedDate = transaction.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    val formattedDate = transaction.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+    val formattedTime = transaction.date.format(DateTimeFormatter.ofPattern("HH:mm"))
 
-    Box(
+    val isExpense = transaction.type == TransactionType.EXPENSE
+    val amountColor = if (isExpense) Error500 else Success500
+    val icon = if (isExpense) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
-        Card(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = true },
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
+            // Icon with background
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if (isExpense) 
+                            Error500.copy(alpha = 0.1f) 
+                        else 
+                            Success500.copy(alpha = 0.1f)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = category.name,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    transaction.description?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                    Text(
-                        text = formattedDate,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                Text(
-                    text = (if (transaction.type == TransactionType.EXPENSE) "-" else "+") +
-                            transaction.amount.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = if (transaction.type == TransactionType.EXPENSE)
-                        MaterialTheme.colorScheme.error
-                    else
-                        MaterialTheme.colorScheme.primary
+                Icon(
+                    imageVector = icon,
+                    contentDescription = if (isExpense) "Расход" else "Доход",
+                    tint = amountColor,
+                    modifier = Modifier.size(24.dp)
                 )
             }
-        }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Редактировать") },
-                onClick = {
-                    expanded = false
-                    onEdit(transaction.id)
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Transaction details
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = category.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                
+                transaction.description?.let { description ->
+                    if (description.isNotBlank()) {
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1
+                        )
+                    }
                 }
-            )
-            DropdownMenuItem(
-                text = { Text("Удалить") },
-                onClick = {
-                    expanded = false
-                    onDelete(transaction.id)
+                
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = formattedDate,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "•",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = formattedTime,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-            )
+            }
+
+            // Amount and menu
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = "${if (isExpense) "-" else "+"}${String.format("%.2f", transaction.amount)} ₽",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = amountColor
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                Box {
+                    IconButton(
+                        onClick = { expanded = true },
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "Меню",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.background(
+                            MaterialTheme.colorScheme.surface,
+                            RoundedCornerShape(12.dp)
+                        )
+                    ) {
+                        DropdownMenuItem(
+                            text = { 
+                                Text(
+                                    "Редактировать",
+                                    style = MaterialTheme.typography.bodyMedium
+                                ) 
+                            },
+                            onClick = {
+                                expanded = false
+                                onEdit(transaction.id)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { 
+                                Text(
+                                    "Удалить",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.error
+                                ) 
+                            },
+                            onClick = {
+                                expanded = false
+                                onDelete(transaction.id)
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }

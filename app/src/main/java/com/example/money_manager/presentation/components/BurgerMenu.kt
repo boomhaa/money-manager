@@ -1,20 +1,14 @@
 package com.example.money_manager.presentation.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.money_manager.domain.model.MenuItem
 import kotlinx.coroutines.launch
 
@@ -26,6 +20,8 @@ fun BurgerMenu(
     content: @Composable () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -38,15 +34,32 @@ fun BurgerMenu(
                     modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
                 )
 
-                menuItems.forEach { menuItem ->
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                menuItems.forEachIndexed { index, menuItem ->
                     NavigationDrawerItem(
                         label = { Text(menuItem.label) },
-                        selected = false,
+                        icon = { menuItem.icon?.let { Icon(it, contentDescription = menuItem.label) } },
+                        selected = currentRoute == menuItem.route,
                         onClick = {
-                            scope.launch { drawerState.close() }
-                            navController.navigate(menuItem.route)
-                        }
+                            scope.launch {
+                                drawerState.close()
+                                if (currentRoute != menuItem.route) {
+                                    navController.navigate(menuItem.route) {
+                                        launchSingleTop = true
+                                    }
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
+                    if (index < menuItems.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            thickness = DividerDefaults.Thickness,
+                            color = DividerDefaults.color
+                        )
+                    }
                 }
             }
         },

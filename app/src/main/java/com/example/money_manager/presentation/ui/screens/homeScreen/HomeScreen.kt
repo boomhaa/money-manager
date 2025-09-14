@@ -5,19 +5,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.money_manager.presentation.viewmodel.homeviewmodel.HomeViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.money_manager.presentation.components.BalanceSummary
+import com.example.money_manager.presentation.components.BeautifulFAB
 import com.example.money_manager.presentation.components.BurgerMenu
+import com.example.money_manager.presentation.components.ColorfulBackground
+import com.example.money_manager.presentation.components.ShimmerCard
 import com.example.money_manager.presentation.components.TransactionItem
+import com.example.money_manager.presentation.components.WelcomeCard
 import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.utils.ScreenMenuList
 import kotlinx.coroutines.launch
@@ -40,56 +46,117 @@ fun HomeScreen(
      {
         Scaffold(
             topBar = {
-                TopAppBar(title = { Text("Финансовый учет") },
+                TopAppBar(
+                    title = { 
+                        Text(
+                            "Финансовый учет",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        ) 
+                    },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Меню")
+                            Icon(
+                                Icons.Default.Menu, 
+                                contentDescription = "Меню",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
                         }
-                    })
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    navController.navigate("addTransaction")
-                }) {
-                    Icon(Icons.Default.Add, contentDescription = "Добавить транзакцию")
-                }
-            }
+                BeautifulFAB(
+                    onClick = {
+                        navController.navigate(Screens.AddTransaction.route)
+                    },
+                    contentDescription = "Добавить транзакцию"
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.background
         ) { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
+            ColorfulBackground {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                // Welcome Card
+                WelcomeCard()
+                
+                // Balance Summary
                 uiState.transactions.takeIf { it.isNotEmpty() }?.let {
                     BalanceSummary(
                         balance = uiState.balance,
                         totalIncome = uiState.totalIncome,
-                        totalExpense = uiState.totalExpense,
-                        modifier = Modifier.padding(16.dp)
+                        totalExpense = uiState.totalExpense
                     )
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
                     when {
                         uiState.isLoading -> {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(5) {
+                                    ShimmerCard()
+                                }
+                            }
                         }
 
                         uiState.error != null -> {
-                            Text(
-                                text = "Ошибка: ${uiState.error}",
-                                color = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            Column(
+                                modifier = Modifier.align(Alignment.Center),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Warning,
+                                    contentDescription = "Ошибка",
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Text(
+                                    text = "Ошибка: ${uiState.error}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.error,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
 
                         uiState.transactions.isEmpty() -> {
-                            Text(
-                                text = "Нет транзакций",
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            Column(
+                                modifier = Modifier.align(Alignment.Center),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.List,
+                                    contentDescription = "Нет транзакций",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.size(64.dp)
+                                )
+                                Text(
+                                    text = "Нет транзакций",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = "Добавьте первую транзакцию,\nнажав на кнопку +",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
 
                         else -> {
@@ -115,6 +182,7 @@ fun HomeScreen(
                             }
                         }
                     }
+                }
                 }
             }
         }

@@ -11,27 +11,31 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.money_manager.domain.model.Category
 import com.example.money_manager.presentation.components.AmountTextField
+import com.example.money_manager.presentation.components.BeautifulButton
+import com.example.money_manager.presentation.components.BeautifulCard
 import com.example.money_manager.presentation.components.CategoryDropdown
 import com.example.money_manager.presentation.components.TransactionTypeSelector
 import com.example.money_manager.presentation.components.DatePickerField
@@ -48,6 +52,15 @@ fun AddTransactionScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(navController.currentBackStackEntry) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<Category>("selectedCategory")
+            ?.observeForever { category ->
+                viewModel.onCategoryChange(category)
+            }
+    }
 
     LaunchedEffect(uiState.value.isSuccess) {
         if (uiState.value.isSuccess) {
@@ -69,15 +82,30 @@ fun AddTransactionScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Добавить транзакцию") },
+                title = {
+                    Text(
+                        "Добавить транзакцию",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Назад",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -87,54 +115,62 @@ fun AddTransactionScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-
-            TransactionTypeSelector(
-                selectedType = uiState.value.transactionType,
-                onTypeSelected = viewModel::onTransactionTypeChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-
-            AmountTextField(
-                value = uiState.value.amount,
-                onValueChange = viewModel::onAmountChange,
+            BeautifulCard(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Сумма"
-            )
-
-            CategoryDropdown(
-                categories = uiState.value.categories,
-                selectedCategory = uiState.value.selectedCategory,
-                onCategorySelected = viewModel::onCategoryChange,
-                modifier = Modifier.fillMaxWidth(),
-                transactionType = uiState.value.transactionType,
-                navController = navController
-            )
-
-            DatePickerField(
-                selectedDate = uiState.value.date,
-                onDateSelected = viewModel::onDateChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = uiState.value.description,
-                onValueChange = viewModel::onDescriptionChange,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Описание (необязательно)") },
-                singleLine = true
-            )
-
-            Button(
-                onClick = viewModel::addTransaction,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 32.dp),
-                enabled = uiState.value.amount.isNotEmpty() && uiState.value.selectedCategory != null
+                elevation = 4,
+                cornerRadius = 16
             ) {
-                Text("Сорхранить")
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    TransactionTypeSelector(
+                        selectedType = uiState.value.transactionType,
+                        onTypeSelected = viewModel::onTransactionTypeChange,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+
+                    AmountTextField(
+                        value = uiState.value.amount,
+                        onValueChange = viewModel::onAmountChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = "Сумма"
+                    )
+
+                    CategoryDropdown(
+                        categories = uiState.value.categories,
+                        selectedCategory = uiState.value.selectedCategory,
+                        onCategorySelected = viewModel::onCategoryChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        transactionType = uiState.value.transactionType,
+                        navController = navController
+                    )
+
+                    DatePickerField(
+                        selectedDate = uiState.value.date,
+                        onDateSelected = viewModel::onDateChange,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    OutlinedTextField(
+                        value = uiState.value.description,
+                        onValueChange = viewModel::onDescriptionChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("Описание (необязательно)") },
+                        singleLine = true
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BeautifulButton(
+                text = "Сохранить",
+                onClick = viewModel::addTransaction,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = uiState.value.amount.isNotEmpty() && uiState.value.selectedCategory != null
+            )
         }
     }
 }

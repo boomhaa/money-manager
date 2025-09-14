@@ -1,20 +1,27 @@
 package com.example.money_manager.presentation.ui.screens.addCategoryScreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -24,6 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.money_manager.presentation.components.BeautifulButton
+import com.example.money_manager.presentation.components.BeautifulCard
+import com.example.money_manager.presentation.components.BeautifulTextField
 import com.example.money_manager.presentation.components.TransactionTypeSelector
 import com.example.money_manager.presentation.viewmodel.addcategoryviewmodel.AddCategoryViewModel
 import kotlinx.coroutines.launch
@@ -58,44 +68,79 @@ fun AddCategoryScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Добавить категорию") },
+                title = { 
+                    Text(
+                        "Добавить категорию",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack, 
+                            contentDescription = "Назад",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OutlinedTextField(
-                value = uiState.value.name,
-                onValueChange = addCategoryViewModel::onNameChange,
-                label = { Text("Название категории") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            TransactionTypeSelector(
-                selectedType = uiState.value.type,
-                onTypeSelected = addCategoryViewModel::onTransactionTypeChange,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Button(
-                onClick = addCategoryViewModel::addCategory,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                enabled = uiState.value.name.isNotEmpty()
+            BeautifulCard(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = 4,
+                cornerRadius = 16
             ) {
-                Text("Сохранить")
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Информация о категории",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    
+                    BeautifulTextField(
+                        value = uiState.value.name,
+                        onValueChange = addCategoryViewModel::onNameChange,
+                        label = "Название категории",
+                        placeholder = "Например: Продукты, Транспорт, Развлечения",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    TransactionTypeSelector(
+                        selectedType = uiState.value.type,
+                        onTypeSelected = addCategoryViewModel::onTransactionTypeChange,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BeautifulButton(
+                text = "Сохранить категорию",
+                onClick = addCategoryViewModel::addCategory,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = uiState.value.name.isNotEmpty()
+            )
         }
     }
 

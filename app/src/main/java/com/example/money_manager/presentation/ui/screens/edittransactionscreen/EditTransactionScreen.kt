@@ -11,16 +11,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -31,7 +32,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.money_manager.domain.model.Category
 import com.example.money_manager.presentation.components.AmountTextField
+import com.example.money_manager.presentation.components.BeautifulButton
+import com.example.money_manager.presentation.components.BeautifulCard
+import com.example.money_manager.presentation.components.BeautifulTextField
 import com.example.money_manager.presentation.components.CategoryDropdown
 import com.example.money_manager.presentation.components.DatePickerField
 import com.example.money_manager.presentation.components.TransactionTypeSelector
@@ -48,6 +53,15 @@ fun EditTransactionScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(navController.currentBackStackEntry) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<Category>("selectedCategory")
+            ?.observeForever { category ->
+                viewModel.onCategoryChange(category)
+            }
+    }
 
     LaunchedEffect(transactionId) {
         if (uiState.value.isLoading) {
@@ -72,15 +86,30 @@ fun EditTransactionScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Редактировать транзакцию") },
+                title = { 
+                    Text(
+                        "Редактировать транзакцию",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    ) 
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack, 
+                            contentDescription = "Назад",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -91,62 +120,107 @@ fun EditTransactionScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (uiState.value.isLoading) {
-                Text("Загрузка...")
+                BeautifulCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = 4,
+                    cornerRadius = 16
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            "Загрузка транзакции...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             } else if (uiState.value.error != null) {
-                Text(
-                    text = uiState.value.error!!,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                BeautifulCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = 4,
+                    cornerRadius = 16
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            text = uiState.value.error!!,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
             } else {
-                TransactionTypeSelector(
-                    selectedType = uiState.value.transactionType,
-                    onTypeSelected = viewModel::onTransactionTypeChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                AmountTextField(
-                    value = uiState.value.amount,
-                    onValueChange = viewModel::onAmountChange,
+                BeautifulCard(
                     modifier = Modifier.fillMaxWidth(),
-                    label = "Сумма"
-                )
+                    elevation = 4,
+                    cornerRadius = 16
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            text = "Информация о транзакции",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        
+                        TransactionTypeSelector(
+                            selectedType = uiState.value.transactionType,
+                            onTypeSelected = viewModel::onTransactionTypeChange,
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-                CategoryDropdown(
-                    categories = uiState.value.categories,
-                    selectedCategory = uiState.value.selectedCategory,
-                    onCategorySelected = viewModel::onCategoryChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    transactionType = uiState.value.transactionType,
-                    navController = navController
-                )
+                        AmountTextField(
+                            value = uiState.value.amount,
+                            onValueChange = viewModel::onAmountChange,
+                            modifier = Modifier.fillMaxWidth(),
+                            label = "Сумма"
+                        )
 
-                DatePickerField(
-                    selectedDate = uiState.value.date,
-                    onDateSelected = viewModel::onDateChange,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                        CategoryDropdown(
+                            categories = uiState.value.categories,
+                            selectedCategory = uiState.value.selectedCategory,
+                            onCategorySelected = viewModel::onCategoryChange,
+                            modifier = Modifier.fillMaxWidth(),
+                            transactionType = uiState.value.transactionType,
+                            navController = navController
+                        )
 
-                OutlinedTextField(
-                    value = uiState.value.description,
-                    onValueChange = viewModel::onDescriptionChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Описание") },
-                    singleLine = true
-                )
+                        DatePickerField(
+                            selectedDate = uiState.value.date,
+                            onDateSelected = viewModel::onDateChange,
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                        BeautifulTextField(
+                            value = uiState.value.description,
+                            onValueChange = viewModel::onDescriptionChange,
+                            label = "Описание",
+                            placeholder = "Добавьте описание (необязательно)",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
 
-                Button(
+                Spacer(modifier = Modifier.height(16.dp))
+
+                BeautifulButton(
+                    text = "Сохранить изменения",
                     onClick = viewModel::updateTransaction,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
+                    modifier = Modifier.fillMaxWidth(),
                     enabled = uiState.value.amount.isNotEmpty() &&
                             uiState.value.selectedCategory != null &&
                             uiState.value.transaction != null
-                ) {
-                    Text("Сохранить изменения")
-                }
+                )
             }
         }
     }

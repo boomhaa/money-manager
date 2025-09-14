@@ -8,7 +8,7 @@ sealed class Screens(val route: String) {
             return "editTransaction/$transactionId"
         }
     }
-
+    object SelectCategory : Screens("selectCategory")
     object AddCategory : Screens("addCategory")
     object Statistics : Screens("statistics")
     object Categories : Screens("categories")

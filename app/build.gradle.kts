@@ -1,3 +1,5 @@
+import org.gradle.internal.classpath.Instrumented.systemProperty
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 
@@ -13,6 +16,19 @@ plugins {
 android {
     namespace = "com.example.money_manager"
     compileSdk = 36
+
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE-notice.md",
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE",
+                "META-INF/NOTICE.md",
+                "META-INF/NOTICE"
+            )
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.money_manager"
@@ -51,6 +67,22 @@ android {
     hilt {
         enableAggregatingTask = false
     }
+
+    testOptions {
+        unitTests.all {
+            it.jvmArgs("-Xmx2g")
+            // Отключаем R8 для тестов
+            it.ignoreFailures = false
+            systemProperty("disableR8", "true")  // Важно!
+            systemProperty("dexmaker.dexcache", layout.buildDirectory.dir("tmp").get().asFile.absolutePath)
+            systemProperty("disableR8", "true")
+            systemProperty("disableMinification", "true")
+        }
+
+        unitTests{
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -77,6 +109,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.charts.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
@@ -93,10 +126,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
 
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.8.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("androidx.room:room-testing:2.7.2")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test:runner:1.5.2")
+    testImplementation("androidx.test:rules:1.5.0")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("io.mockk:mockk:1.13.8")
+    
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.room:room-testing:2.7.2")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("io.mockk:mockk-android:1.13.8")
+    
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

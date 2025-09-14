@@ -11,6 +11,7 @@ import com.example.money_manager.presentation.ui.screens.addTransactionScreen.Ad
 import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
 import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
+import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.SelectCategoryScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
 
 @Composable
@@ -40,6 +41,10 @@ fun AppNavigation() {
                 navController = navController,
                 transactionId = transactionId
             )
+        }
+
+        composable(Screens.SelectCategory.route) {
+            SelectCategoryScreen(navController)
         }
 
         composable(Screens.AddCategory.route) {

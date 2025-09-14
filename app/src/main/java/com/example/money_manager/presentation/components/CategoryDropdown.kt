@@ -6,6 +6,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +31,7 @@ fun CategoryDropdown(
     navController: NavController
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val filteredCategories = categories.filter { it.type == transactionType }
+    val filteredCategories = categories.filter { it.type == transactionType }.take(6)
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -62,10 +63,10 @@ fun CategoryDropdown(
                 )
             }
             DropdownMenuItem(
-                text = { Text("➕ Добавить категорию")},
+                text = { Text("Ещё…", color = MaterialTheme.colorScheme.primary) },
                 onClick = {
-                    navController.navigate(Screens.AddCategory.route)
                     expanded = false
+                    navController.navigate(Screens.SelectCategory.route) // навигация на SelectCategoryScreen
                 }
             )
         }
