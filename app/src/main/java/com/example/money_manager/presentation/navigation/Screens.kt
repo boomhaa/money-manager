@@ -10,7 +10,7 @@ sealed class Screens(val route: String) {
             return "editTransaction/$transactionId"
         }
     }
-    object SelectCategory : Screens("selectCategory/{transactionType87}"){
+    object SelectCategory : Screens("selectCategory/{transactionType}"){
         fun createRoute(transactionType: TransactionType): String {
             return "selectCategory/$transactionType"
         }
