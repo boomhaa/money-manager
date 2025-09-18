@@ -43,21 +43,21 @@ fun HomeScreen(
         drawerState = drawerState,
         menuItems = ScreenMenuList.screenMenuList
     )
-     {
+    {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { 
+                    title = {
                         Text(
                             "Финансовый учет",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
-                        ) 
+                        )
                     },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(
-                                Icons.Default.Menu, 
+                                Icons.Default.Menu,
                                 contentDescription = "Меню",
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
@@ -80,107 +80,102 @@ fun HomeScreen(
             containerColor = MaterialTheme.colorScheme.background
         ) { paddingValues ->
             ColorfulBackground {
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                WelcomeCard()
+                    item { WelcomeCard() }
 
-                uiState.transactions.takeIf { it.isNotEmpty() }?.let {
-                    BalanceSummary(
-                        balance = uiState.balance,
-                        totalIncome = uiState.totalIncome,
-                        totalExpense = uiState.totalExpense
-                    )
-                }
+                    uiState.transactions.takeIf { it.isNotEmpty() }?.let {
+                        item {
+                            BalanceSummary(
+                                balance = uiState.balance,
+                                totalIncome = uiState.totalIncome,
+                                totalExpense = uiState.totalExpense
+                            )
+                        }
+                    }
 
-                Box(modifier = Modifier.fillMaxSize()) {
+
                     when {
                         uiState.isLoading -> {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
-                                contentPadding = PaddingValues(8.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(5) {
-                                    ShimmerCard()
-                                }
+                            items(5) {
+                                ShimmerCard()
                             }
                         }
 
                         uiState.error != null -> {
-                            Column(
-                                modifier = Modifier.align(Alignment.Center),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Warning,
-                                    contentDescription = "Ошибка",
-                                    tint = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier.size(48.dp)
-                                )
-                                Text(
-                                    text = "Ошибка: ${uiState.error}",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.error,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-
-                        uiState.transactions.isEmpty() -> {
-                            Column(
-                                modifier = Modifier.align(Alignment.Center),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.List,
-                                    contentDescription = "Нет транзакций",
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.size(64.dp)
-                                )
-                                Text(
-                                    text = "Нет транзакций",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Text(
-                                    text = "Добавьте первую транзакцию,\nнажав на кнопку +",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-
-                        else -> {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
-                                contentPadding = PaddingValues(8.dp)
-                            ) {
-                                items(uiState.transactions) { item ->
-                                    TransactionItem(
-                                        item = item,
-                                        onEdit = { id ->
-                                            navController.navigate(
-                                                Screens.EditTransaction.createRoute(
-                                                    id
-                                                )
-                                            )
-                                        },
-                                        onDelete = { id ->
-                                            viewModel.deleteTransaction(transaction = item.transaction)
-                                        }
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    Icon(
+                                        Icons.Default.Warning,
+                                        contentDescription = "Ошибка",
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(48.dp)
+                                    )
+                                    Text(
+                                        text = "Ошибка: ${uiState.error}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.error,
+                                        textAlign = TextAlign.Center
                                     )
                                 }
                             }
                         }
+
+                        uiState.transactions.isEmpty() -> {
+                            item {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.List,
+                                        contentDescription = "Нет транзакций",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(64.dp)
+                                    )
+                                    Text(
+                                        text = "Нет транзакций",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Text(
+                                        text = "Добавьте первую транзакцию,\nнажав на кнопку +",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                        else -> {
+                            items(uiState.transactions) { item ->
+                                TransactionItem(
+                                    item = item,
+                                    onEdit = { id ->
+                                        navController.navigate(
+                                            Screens.EditTransaction.createRoute(
+                                                id
+                                            )
+                                        )
+                                    },
+                                    onDelete = { id ->
+                                        viewModel.deleteTransaction(transaction = item.transaction)
+                                    }
+                                )
+                            }
+                        }
                     }
-                }
                 }
             }
         }
