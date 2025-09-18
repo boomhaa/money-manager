@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.presentation.components.AmountTextField
 import com.example.money_manager.presentation.components.BeautifulButton
@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditTransactionScreen(
-    navController: NavHostController,
+    navController: NavController,
     transactionId: Long,
     viewModel: EditTransactionViewModel = hiltViewModel()
 ) {

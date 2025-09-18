@@ -66,7 +66,9 @@ fun CategoryDropdown(
                 text = { Text("Ещё…", color = MaterialTheme.colorScheme.primary) },
                 onClick = {
                     expanded = false
-                    navController.navigate(Screens.SelectCategory.route) // навигация на SelectCategoryScreen
+                    navController.navigate(Screens.SelectCategory.createRoute(
+                        transactionType
+                    ))
                 }
             )
         }

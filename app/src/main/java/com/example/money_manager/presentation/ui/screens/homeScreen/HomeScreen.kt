@@ -85,10 +85,8 @@ fun HomeScreen(
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                // Welcome Card
                 WelcomeCard()
-                
-                // Balance Summary
+
                 uiState.transactions.takeIf { it.isNotEmpty() }?.let {
                     BalanceSummary(
                         balance = uiState.balance,
