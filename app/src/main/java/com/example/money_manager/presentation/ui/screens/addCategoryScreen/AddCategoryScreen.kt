@@ -121,7 +121,7 @@ fun AddCategoryScreen(
                         value = uiState.value.name,
                         onValueChange = addCategoryViewModel::onNameChange,
                         label = "Название категории",
-                        placeholder = "Например: Продукты, Транспорт, Развлечения",
+                        placeholder = "Например: Продукты, Транспорт",
                         modifier = Modifier.fillMaxWidth()
                     )
 
