@@ -5,8 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.money_manager.domain.model.MenuItem
@@ -51,13 +51,17 @@ fun BurgerMenu(
                                 }
                             }
                         },
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = Color(0xFFDDE2F9),
+                            selectedTextColor = Color(0xFF000000),
+                            selectedIconColor = Color(0xFF000000)
+                        )
                     )
                     if (index < menuItems.lastIndex) {
                         HorizontalDivider(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             thickness = DividerDefaults.Thickness,
-                            color = DividerDefaults.color
                         )
                     }
                 }
