@@ -13,6 +13,7 @@ import com.example.money_manager.presentation.ui.screens.editTransactionScreen.E
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.SelectCategoryScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
+import com.example.money_manager.utils.TransactionType
 
 @Composable
 fun AppNavigation() {
@@ -43,8 +44,18 @@ fun AppNavigation() {
             )
         }
 
-        composable(Screens.SelectCategory.route) {
-            SelectCategoryScreen(navController)
+        composable(
+            route = Screens.SelectCategory.route,
+            arguments = listOf(navArgument("transactionType") {
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val transactionTypeName = backStackEntry.arguments?.getString("transactionType")
+            val transactionType = transactionTypeName?.let { TransactionType.valueOf(it) }
+            SelectCategoryScreen(
+                navController = navController,
+                transactionType = transactionType
+            )
         }
 
         composable(Screens.AddCategory.route) {

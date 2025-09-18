@@ -1,7 +1,7 @@
 package com.example.money_manager.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -30,7 +30,7 @@ fun BeautifulTextField(
         placeholder = placeholder?.let { { Text(it) } },
         modifier = modifier
             .fillMaxWidth()
-            .height(if (singleLine) 56.dp else 80.dp),
+            .heightIn(min = if (singleLine) 56.dp else 80.dp),
         singleLine = singleLine,
         enabled = enabled,
         isError = isError,

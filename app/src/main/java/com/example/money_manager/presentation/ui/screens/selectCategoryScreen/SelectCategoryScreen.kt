@@ -22,7 +22,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -47,6 +46,7 @@ import com.example.money_manager.utils.TransactionType
 @Composable
 fun SelectCategoryScreen(
     navController: NavController,
+    transactionType: TransactionType?,
     viewModel: CategoriesViewModel = hiltViewModel()
 ){
 
@@ -159,7 +159,11 @@ fun SelectCategoryScreen(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.value.categories) { category ->
+                    val filteredCategories = uiState.value.categories.filter { category ->
+                        transactionType == null || category.type == transactionType
+                    }
+
+                    items(filteredCategories) { category ->
                         BeautifulCard(
                             modifier = Modifier.fillMaxWidth(),
                             elevation = 2,

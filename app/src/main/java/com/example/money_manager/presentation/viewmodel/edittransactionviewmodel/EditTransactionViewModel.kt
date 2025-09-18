@@ -3,7 +3,6 @@ package com.example.money_manager.presentation.viewmodel.edittransactionviewmode
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.domain.model.Category
-import com.example.money_manager.presentation.viewmodel.edittransactionviewmodel.EditTransactionUiState
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
 import com.example.money_manager.domain.usecase.transaction.GetTransactionByIdUseCase
 import com.example.money_manager.domain.usecase.transaction.UpdateTransactionUseCase
@@ -33,7 +32,7 @@ class EditTransactionViewModel @Inject constructor(
             try {
                 val categories = getCategoriesUseCase().first()
                 val transaction = getTransactionByIdUseCase(transactionId)
-                val category = _uiState.value.categories.find { it.id == transaction.categoryId }
+                val category = categories.find { it.id == transaction.categoryId }
                 _uiState.value = _uiState.value.copy(
                     transaction = transaction,
                     amount = transaction.amount.toString(),

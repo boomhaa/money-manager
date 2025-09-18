@@ -60,12 +60,13 @@ class StatisticViewModel @Inject constructor(
                 val transactionOverTime = filteredTransactions
                     .groupBy { it.date.toLocalDate() }
                     .mapValues { entry -> entry.value.sumOf { it.amount } }
+                    .toSortedMap()
 
                 _uiState.value = _uiState.value.copy(
                     totalIncome = income,
                     totalExpense = expense,
                     balance = balance,
-                    expenseByCategory = expenseByCategory.mapKeys { it.key.toString() },
+                    expenseByCategory = expenseByCategory.mapKeys { it.key },
                     transactionsOverTime = transactionOverTime
                 )
             }
