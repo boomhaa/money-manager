@@ -41,7 +41,7 @@ fun CategoryItem(category: Category) {
                         imageVector = icon.toImageVector(),
                         contentDescription = category.name,
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(40.dp)
                     )
                 }
 
