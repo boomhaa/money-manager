@@ -8,7 +8,8 @@ fun CategoryEntity.toCategory(): Category {
         id = id,
         name = name,
         type = type,
-        isDefault = isDefault
+        isDefault = isDefault,
+        iconName = iconName
     )
 }
 
@@ -17,7 +18,8 @@ fun Category.toCategoryEntity(): CategoryEntity {
         id = id,
         name = name,
         type = type,
-        isDefault = isDefault
+        isDefault = isDefault,
+        iconName = iconName
     )
 }
 

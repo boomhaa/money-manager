@@ -18,4 +18,5 @@ sealed class Screens(val route: String) {
     object AddCategory : Screens("addCategory")
     object Statistics : Screens("statistics")
     object Categories : Screens("categories")
+    object SelectIcon: Screens("selectIcon")
 }

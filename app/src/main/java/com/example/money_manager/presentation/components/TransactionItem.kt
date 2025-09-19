@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,6 +18,7 @@ import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.presentation.theme.Success500
 import com.example.money_manager.presentation.theme.Error500
 import com.example.money_manager.utils.TransactionType
+import com.example.money_manager.utils.toImageVector
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("DefaultLocale")
@@ -38,7 +37,6 @@ fun TransactionItem(
 
     val isExpense = transaction.type == TransactionType.EXPENSE
     val amountColor = if (isExpense) Error500 else Success500
-    val icon = if (isExpense) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowUp
 
     Card(
         modifier = Modifier
@@ -56,7 +54,6 @@ fun TransactionItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icon with background
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -69,17 +66,17 @@ fun TransactionItem(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = if (isExpense) "Расход" else "Доход",
-                    tint = amountColor,
-                    modifier = Modifier.size(24.dp)
-                )
+                category.iconName?.let { icon ->
+                    Icon(
+                        imageVector = icon.toImageVector(),
+                        contentDescription = if (isExpense) "Расход" else "Доход",
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Transaction details
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -123,7 +120,6 @@ fun TransactionItem(
                 }
             }
 
-            // Amount and menu
             Column(
                 horizontalAlignment = Alignment.End
             ) {
