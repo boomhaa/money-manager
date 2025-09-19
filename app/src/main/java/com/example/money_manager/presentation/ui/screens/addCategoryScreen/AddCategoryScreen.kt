@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -34,8 +32,10 @@ import androidx.navigation.NavController
 import com.example.money_manager.presentation.components.BeautifulButton
 import com.example.money_manager.presentation.components.BeautifulCard
 import com.example.money_manager.presentation.components.BeautifulTextField
+import com.example.money_manager.presentation.components.IconSelector
 import com.example.money_manager.presentation.components.TransactionTypeSelector
 import com.example.money_manager.presentation.viewmodel.addcategoryviewmodel.AddCategoryViewModel
+import com.example.money_manager.utils.iconsForType
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,6 +47,7 @@ fun AddCategoryScreen(
     val uiState = addCategoryViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val icons = iconsForType(uiState.value.type)
 
     LaunchedEffect(uiState.value.isSuccess) {
         if (uiState.value.isSuccess) {
@@ -97,8 +98,7 @@ fun AddCategoryScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             BeautifulCard(
@@ -129,6 +129,19 @@ fun AddCategoryScreen(
                         selectedType = uiState.value.type,
                         onTypeSelected = addCategoryViewModel::onTransactionTypeChange,
                         modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Text(
+                        text = "Выберите иконку",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    IconSelector(
+                        icons = icons,
+                        selected = uiState.value.icon,
+                        onIconSelected = addCategoryViewModel::onIconChange
                     )
                 }
             }

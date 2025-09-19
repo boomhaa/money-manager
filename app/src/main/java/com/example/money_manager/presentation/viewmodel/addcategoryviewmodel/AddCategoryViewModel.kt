@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.usecase.category.InsertCategoryUseCase
+import com.example.money_manager.utils.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,11 @@ class AddCategoryViewModel @Inject constructor(
     }
 
     fun onTransactionTypeChange(type: TransactionType) {
-        _uiState.value = _uiState.value.copy(type = type)
+        _uiState.value = _uiState.value.copy(type = type, icon = null)
+    }
+
+    fun onIconChange(icon: CategoryIcons) {
+        _uiState.value = _uiState.value.copy(icon = icon)
     }
 
     fun addCategory() {
@@ -32,7 +37,8 @@ class AddCategoryViewModel @Inject constructor(
             try {
                 val category = Category(
                     name = _uiState.value.name,
-                    type = _uiState.value.type
+                    type = _uiState.value.type,
+                    iconName = _uiState.value.icon
                     )
                 insertCategoryUseCase(category)
                 _uiState.value = _uiState.value.copy(isSuccess = true)

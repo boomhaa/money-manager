@@ -41,6 +41,7 @@ import com.example.money_manager.presentation.theme.Success500
 import com.example.money_manager.presentation.theme.Error500
 import com.example.money_manager.presentation.viewmodel.categoriesviewmodel.CategoriesViewModel
 import com.example.money_manager.utils.TransactionType
+import com.example.money_manager.utils.toImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,23 +49,23 @@ fun SelectCategoryScreen(
     navController: NavController,
     transactionType: TransactionType?,
     viewModel: CategoriesViewModel = hiltViewModel()
-){
+) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         "Выберите категорию",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
-                    ) 
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack()}) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack, 
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Назад",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
@@ -77,8 +78,7 @@ fun SelectCategoryScreen(
             )
         },
         containerColor = MaterialTheme.colorScheme.background
-    ) {
-            paddingValues ->
+    ) { paddingValues ->
         when {
             uiState.value.isLoading -> {
                 LazyColumn(
@@ -193,7 +193,11 @@ fun SelectCategoryScreen(
                                         ),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(
+                                    category.iconName?.let {icon ->
+                                        Icon(imageVector = icon.toImageVector(),
+                                            contentDescription = category.name,
+                                            modifier = Modifier.size(20.dp))
+                                    } ?: Icon(
                                         Icons.Default.Category,
                                         contentDescription = category.name,
                                         tint = when (category.type) {
@@ -203,9 +207,9 @@ fun SelectCategoryScreen(
                                         modifier = Modifier.size(20.dp)
                                     )
                                 }
-                                
+
                                 Spacer(modifier = Modifier.width(16.dp))
-                                
+
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
                                         text = category.name,
@@ -222,7 +226,7 @@ fun SelectCategoryScreen(
                                         }
                                     )
                                 }
-                                
+
                                 Icon(
                                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
                                     contentDescription = "Выбрать",
@@ -232,7 +236,7 @@ fun SelectCategoryScreen(
                             }
                         }
                     }
-                    
+
                     item {
                         BeautifulCard(
                             modifier = Modifier.fillMaxWidth(),
@@ -262,9 +266,9 @@ fun SelectCategoryScreen(
                                         modifier = Modifier.size(20.dp)
                                     )
                                 }
-                                
+
                                 Spacer(modifier = Modifier.width(16.dp))
-                                
+
                                 Text(
                                     text = "Добавить новую категорию",
                                     style = MaterialTheme.typography.titleMedium,
