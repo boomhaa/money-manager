@@ -21,8 +21,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.navigation.NavController
+import com.example.money_manager.presentation.navigation.Screens
 
 
 @Composable
@@ -30,7 +33,17 @@ fun IconSelector(
     icons: List<CategoryIcons>,
     selected: CategoryIcons?,
     onIconSelected: (CategoryIcons) -> Unit,
+    navController: NavController
 ) {
+    LaunchedEffect(navController.currentBackStackEntry) {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<CategoryIcons>("selectedIcon")
+            ?.observeForever { icon ->
+                onIconSelected(icon)
+            }
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(5),
         modifier = Modifier.fillMaxWidth(),
@@ -45,7 +58,7 @@ fun IconSelector(
                 tint = if (iconEnum == selected) MaterialTheme.colorScheme.primary
                 else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(60.dp)
                     .clip(CircleShape)
                     .clickable { onIconSelected(iconEnum) }
                     .background(
@@ -60,6 +73,9 @@ fun IconSelector(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
+                    .clickable{
+                        navController.navigate(Screens.SelectIcon.route)
+                    }
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {

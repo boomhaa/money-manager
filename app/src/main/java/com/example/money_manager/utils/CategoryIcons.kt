@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.money_manager.domain.model.IconCategory
 
 enum class CategoryIcons {
     Restaurant,
@@ -245,7 +246,170 @@ fun iconsForType(type: TransactionType): List<CategoryIcons> = when (type) {
         CategoryIcons.School,
         CategoryIcons.Pool,
         CategoryIcons.Toys,
-        CategoryIcons.GolfCourse
+        CategoryIcons.GolfCourse,
+        CategoryIcons.Casino
     )
 }
+
+fun getIconsByCategory(): List<IconCategory> = listOf(
+    IconCategory(
+        "Финансы", listOf(
+            CategoryIcons.AttachMoney,
+            CategoryIcons.AccountBalance,
+            CategoryIcons.CreditCard,
+            CategoryIcons.Savings,
+            CategoryIcons.Payments,
+            CategoryIcons.TrendingUp,
+            CategoryIcons.Receipt,
+            CategoryIcons.RequestQuote,
+            CategoryIcons.Calculate,
+            CategoryIcons.Assignment
+        )
+    ),
+    IconCategory(
+        "Общее", listOf(
+            CategoryIcons.Work,
+            CategoryIcons.CardGiftcard,
+            CategoryIcons.Star,
+            CategoryIcons.Help,
+            CategoryIcons.Public
+        )
+    ),
+
+
+    IconCategory(
+        "Популярные", listOf(
+            CategoryIcons.Restaurant,
+            CategoryIcons.DirectionsCar,
+            CategoryIcons.ShoppingCart,
+            CategoryIcons.Home,
+            CategoryIcons.LocalHospital,
+            CategoryIcons.FitnessCenter,
+            CategoryIcons.LocalCafe,
+            CategoryIcons.Movie,
+            CategoryIcons.School
+        )
+    ),
+    IconCategory(
+        "Еда и напитки", listOf(
+            CategoryIcons.Restaurant,
+            CategoryIcons.LocalCafe,
+            CategoryIcons.LocalBar,
+            CategoryIcons.LocalPizza,
+            CategoryIcons.Cake,
+            CategoryIcons.FreeBreakfast,
+            CategoryIcons.WineBar,
+            CategoryIcons.LocalGroceryStore
+        )
+    ),
+    IconCategory(
+        "Транспорт", listOf(
+            CategoryIcons.DirectionsCar,
+            CategoryIcons.DirectionsBus,
+            CategoryIcons.Flight,
+            CategoryIcons.Train,
+            CategoryIcons.DirectionsBike,
+            CategoryIcons.LocalTaxi,
+            CategoryIcons.BikeScooter
+        )
+    ),
+    IconCategory(
+        "Покупки", listOf(
+            CategoryIcons.ShoppingCart,
+            CategoryIcons.ShoppingBag,
+            CategoryIcons.Store,
+            CategoryIcons.LocalMall,
+            CategoryIcons.TagFaces,
+            CategoryIcons.Loyalty
+        )
+    ),
+    IconCategory(
+        "Дом", listOf(
+            CategoryIcons.Home,
+            CategoryIcons.Kitchen,
+            CategoryIcons.Chair,
+            CategoryIcons.Yard,
+            CategoryIcons.CleaningServices,
+            CategoryIcons.Build,
+            CategoryIcons.ElectricalServices
+        )
+    ),
+    IconCategory(
+        "Здоровье", listOf(
+            CategoryIcons.LocalHospital,
+            CategoryIcons.HealthAndSafety,
+            CategoryIcons.Medication,
+            CategoryIcons.Spa,
+            CategoryIcons.SelfImprovement,
+            CategoryIcons.Coronavirus
+        )
+    ),
+    IconCategory(
+        "Красота", listOf(
+            CategoryIcons.Face,
+            CategoryIcons.Style,
+            CategoryIcons.Palette,
+            CategoryIcons.Brush
+        )
+    ),
+    IconCategory(
+        "Развлечения", listOf(
+            CategoryIcons.Movie,
+            CategoryIcons.SportsEsports,
+            CategoryIcons.MusicNote,
+            CategoryIcons.TheaterComedy,
+            CategoryIcons.SportsBaseball,
+            CategoryIcons.Casino,
+            CategoryIcons.MovieFilter
+        )
+    ),
+    IconCategory(
+        "Спорт", listOf(
+            CategoryIcons.FitnessCenter,
+            CategoryIcons.SportsSoccer,
+            CategoryIcons.SportsBasketball,
+            CategoryIcons.SportsTennis,
+            CategoryIcons.GolfCourse,
+            CategoryIcons.Pool
+        )
+    ),
+    IconCategory(
+        "Образование", listOf(
+            CategoryIcons.School,
+            CategoryIcons.Book,
+            CategoryIcons.MenuBook,
+            CategoryIcons.HistoryEdu,
+            CategoryIcons.Science,
+            CategoryIcons.Computer,
+            CategoryIcons.Laptop
+        )
+    ),
+    IconCategory(
+        "Семья и дети", listOf(
+            CategoryIcons.FamilyRestroom,
+            CategoryIcons.ChildCare,
+            CategoryIcons.ChildFriendly,
+            CategoryIcons.Toys,
+            CategoryIcons.CakeBirthday,
+            CategoryIcons.Pets
+        )
+    ),
+    IconCategory(
+        "Отдых", listOf(
+            CategoryIcons.BeachAccess,
+            CategoryIcons.LocalFlorist,
+            CategoryIcons.Terrain,
+            CategoryIcons.Park,
+            CategoryIcons.OutdoorGrill
+        )
+    ),
+    IconCategory(
+        "Другое", listOf(
+            CategoryIcons.Favorite,
+            CategoryIcons.Star,
+            CategoryIcons.Help,
+            CategoryIcons.Public,
+        )
+    )
+)
 

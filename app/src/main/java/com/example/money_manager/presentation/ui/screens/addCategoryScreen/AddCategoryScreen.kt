@@ -141,7 +141,8 @@ fun AddCategoryScreen(
                     IconSelector(
                         icons = icons,
                         selected = uiState.value.icon,
-                        onIconSelected = addCategoryViewModel::onIconChange
+                        onIconSelected = addCategoryViewModel::onIconChange,
+                        navController = navController
                     )
                 }
             }
