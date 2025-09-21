@@ -45,17 +45,17 @@ fun CategoriesScreen(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { 
+                    title = {
                         Text(
                             "Категории",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
-                        ) 
+                        )
                     },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
                             Icon(
-                                Icons.Default.Menu, 
+                                Icons.Default.Menu,
                                 contentDescription = "Меню",
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
@@ -124,7 +124,20 @@ fun CategoriesScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(uiState.categories) { category ->
-                            CategoryItem(category = category)
+                            CategoryItem(
+                                category = category,
+                                onEdit = { id ->
+                                    navController.navigate(
+                                        Screens.EditCategory.createRoute(
+                                            id
+                                        )
+                                    )
+
+                                },
+                                onDelete = { id ->
+                                    viewModel.deleteCategory(category)
+                                }
+                            )
                         }
                     }
                 }
