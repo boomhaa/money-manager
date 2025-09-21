@@ -16,6 +16,13 @@ sealed class Screens(val route: String) {
         }
     }
     object AddCategory : Screens("addCategory")
+
+    object EditCategory: Screens("editCategory/{categoryId}"){
+        fun createRoute(categoryId: Long): String {
+            return "editCategory/$categoryId"
+        }
+    }
+
     object Statistics : Screens("statistics")
     object Categories : Screens("categories")
     object SelectIcon: Screens("selectIcon")

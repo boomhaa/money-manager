@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
+import com.example.money_manager.presentation.ui.screens.editCategoryScreen.EditCategoryScreen
 import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.SelectCategoryScreen
@@ -73,6 +74,19 @@ fun AppNavigation() {
 
         composable(Screens.SelectIcon.route) {
             SelectIconScreen(navController = navController)
+        }
+
+        composable(
+            route = Screens.EditCategory.route,
+            arguments = listOf(navArgument("categoryId"){
+                type = NavType.LongType
+            })
+        ) { backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getLong("categoryId") ?: 0L
+            EditCategoryScreen(
+                navController = navController,
+                categoryId = categoryId
+            )
         }
     }
 }

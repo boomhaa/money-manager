@@ -56,7 +56,7 @@ fun IconCategorySection(
                         contentDescription = icon.name,
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
-                            .size(60.dp)
+                            .size(50.dp)
                             .clickable { onIconSelected(icon) }
                     )
                 }
