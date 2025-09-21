@@ -57,14 +57,14 @@ fun CategoryItem(
                         imageVector = icon.toImageVector(),
                         contentDescription = category.name,
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(35.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
             }
 
-            Column {
+            Column (modifier = Modifier.weight(1f)){
                 Text(
                     text = category.name,
                     style = MaterialTheme.typography.titleMedium,
