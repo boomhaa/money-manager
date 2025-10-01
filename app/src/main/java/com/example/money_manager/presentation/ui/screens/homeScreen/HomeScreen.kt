@@ -25,6 +25,8 @@ import com.example.money_manager.presentation.components.ShimmerCard
 import com.example.money_manager.presentation.components.TransactionItem
 import com.example.money_manager.presentation.components.WelcomeCard
 import com.example.money_manager.presentation.navigation.Screens
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthUiState
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.ScreenMenuList
 import kotlinx.coroutines.launch
 
@@ -32,16 +34,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    authUiState: AuthUiState,
+    signOut: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     BurgerMenu(
         navController = navController,
         drawerState = drawerState,
-        menuItems = ScreenMenuList.screenMenuList
+        menuItems = ScreenMenuList.screenMenuList,
+        uiState = authUiState,
+        signOut = signOut
     )
     {
         Scaffold(
@@ -170,7 +176,7 @@ fun HomeScreen(
                                         )
                                     },
                                     onDelete = { id ->
-                                        viewModel.deleteTransaction(transaction = item.transaction)
+                                        homeViewModel.deleteTransaction(transaction = item.transaction)
                                     }
                                 )
                             }

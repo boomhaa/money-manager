@@ -23,15 +23,20 @@ import com.example.money_manager.presentation.components.BurgerMenu
 import com.example.money_manager.presentation.components.CategoryItem
 import com.example.money_manager.presentation.components.ShimmerCard
 import com.example.money_manager.presentation.navigation.Screens
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthUiState
 import com.example.money_manager.presentation.viewmodel.categoriesviewmodel.CategoriesViewModel
 import com.example.money_manager.utils.ScreenMenuList
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(
     viewModel: CategoriesViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    authUiState: AuthUiState,
+    signOut: () -> Unit
+
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -39,7 +44,9 @@ fun CategoriesScreen(
     BurgerMenu(
         navController = navController,
         drawerState = drawerState,
-        menuItems = ScreenMenuList.screenMenuList
+        menuItems = ScreenMenuList.screenMenuList,
+        uiState = authUiState,
+        signOut = signOut
     )
     {
         Scaffold(

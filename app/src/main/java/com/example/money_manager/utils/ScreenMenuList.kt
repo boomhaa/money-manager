@@ -12,6 +12,5 @@ object ScreenMenuList {
         MenuItem("Главная", Screens.Home.route, Icons.Filled.Home),
         MenuItem("Статистика", Screens.Statistics.route, Icons.Filled.BarChart),
         MenuItem("Категории", Screens.Categories.route, Icons.AutoMirrored.Filled.List),
-        MenuItem("Войти", Screens.Auth.route, Icons.AutoMirrored.Filled.Login)
     )
 }

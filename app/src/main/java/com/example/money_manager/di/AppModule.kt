@@ -8,6 +8,7 @@ import com.example.money_manager.data.repository.CategoryRepositoryImpl
 import com.example.money_manager.data.repository.TransactionRepositoryImpl
 import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.TransactionRepository
+import com.example.money_manager.utils.PreferencesManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,5 +45,11 @@ object AppModule {
         transactionDao: TransactionDao
     ): TransactionRepository {
         return TransactionRepositoryImpl(transactionDao = transactionDao)
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
+        return PreferencesManager(context)
     }
 }

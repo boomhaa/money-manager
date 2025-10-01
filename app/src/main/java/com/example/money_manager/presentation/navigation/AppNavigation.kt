@@ -1,12 +1,14 @@
 package com.example.money_manager.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.money_manager.presentation.ui.screens.AuthScreen
+import com.example.money_manager.presentation.ui.screens.authScreen.AuthScreen
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
@@ -16,19 +18,32 @@ import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.SelectCategoryScreen
 import com.example.money_manager.presentation.ui.screens.selectIconScreen.SelectIconScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.TransactionType
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 @Composable
-fun AppNavigation(googleSignInClient: GoogleSignInClient) {
+fun AppNavigation(
+    googleSignInClient: GoogleSignInClient,
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
     val navController = rememberNavController()
+    val uiState = authViewModel.uiState.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
-        startDestination = Screens.Home.route
+        startDestination = if (uiState.value.isGuest || uiState.value.user != null) {
+            Screens.Home.route
+        } else {
+            Screens.Auth.route
+        }
     ) {
         composable(Screens.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(
+                navController = navController,
+                authUiState = uiState.value,
+                signOut =  authViewModel::signOut
+            )
         }
 
         composable(Screens.AddTransaction.route) {
@@ -67,11 +82,19 @@ fun AppNavigation(googleSignInClient: GoogleSignInClient) {
         }
 
         composable(Screens.Statistics.route) {
-            StatisticsScreen(navController = navController)
+            StatisticsScreen(
+                navController = navController,
+                authUiState = uiState.value,
+                signOut = authViewModel::signOut
+            )
         }
 
         composable(Screens.Categories.route) {
-            CategoriesScreen(navController = navController)
+            CategoriesScreen(
+                navController = navController,
+                authUiState = uiState.value,
+                signOut =  authViewModel::signOut
+            )
         }
 
         composable(Screens.SelectIcon.route) {
@@ -94,7 +117,8 @@ fun AppNavigation(googleSignInClient: GoogleSignInClient) {
         composable(Screens.Auth.route) {
             AuthScreen(
                 googleSignInClient = googleSignInClient,
-                navController = navController
+                navController = navController,
+                viewModel = authViewModel
             )
         }
     }

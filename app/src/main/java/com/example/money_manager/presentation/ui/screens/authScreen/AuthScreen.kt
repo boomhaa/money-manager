@@ -1,14 +1,20 @@
-package com.example.money_manager.presentation.ui.screens
+package com.example.money_manager.presentation.ui.screens.authScreen
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.shapes.Shape
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -17,11 +23,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +38,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.money_manager.presentation.components.BeautifulButton
+import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 
@@ -47,7 +58,7 @@ fun AuthScreen(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val task = com.google.android.gms.auth.api.signin.GoogleSignIn
+        val task = GoogleSignIn
             .getSignedInAccountFromIntent(result.data)
         try {
             val account = task.getResult(ApiException::class.java)
@@ -58,6 +69,14 @@ fun AuthScreen(
             e.printStackTrace()
         }
     }
+
+    LaunchedEffect(uiState.value.user) {
+        if (uiState.value.user != null) {
+            navController.navigate(Screens.Home.route)
+        }
+    }
+
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -67,15 +86,6 @@ fun AuthScreen(
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад",
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -93,6 +103,7 @@ fun AuthScreen(
                 uiState.value.isLoading -> {
                     CircularProgressIndicator()
                 }
+
                 uiState.value.user != null -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -108,19 +119,32 @@ fun AuthScreen(
 
                         Text(text = "Имя: ${uiState.value.user?.displayName ?: "Не указано"}")
                         Text(text = "Email: ${uiState.value.user?.email ?: "Не указано"}")
-                        Button(onClick = { viewModel.signOut()}) {
+                        Button(onClick = { viewModel.signOut() }) {
                             Text("Выйти")
                         }
                     }
                 }
+
                 else -> {
-                    Button(
-                        onClick = {
-                            val signInIntent = googleSignInClient.signInIntent
-                            launcher.launch(signInIntent)
-                        }
-                    ) {
-                        Text("Войти через Google")
+                    Column(Modifier.padding(16.dp)) {
+                        BeautifulButton(text = "Войти с помощью Google",
+                            onClick = {
+                                val signInIntent = googleSignInClient.signInIntent
+                                launcher.launch(signInIntent)
+                            },
+                            modifier = Modifier.width(300.dp)
+                        )
+                        Spacer(Modifier.height(16.dp))
+
+                        BeautifulButton(
+                            text = "Продолжить как гость",
+                            onClick = {
+                                viewModel.continueAsGuest()
+                                navController.navigate(Screens.Home.route)
+                            },
+                            isPrimary = false,
+                            modifier = Modifier.width(300.dp)
+                        )
                     }
                 }
             }
