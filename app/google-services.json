@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "422194993173",
+    "project_id": "money-manager-e5648",
+    "storage_bucket": "money-manager-e5648.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422194993173:android:d14ce6ed12c2d3e646561c",
+        "android_client_info": {
+          "package_name": "com.example.money_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422194993173-v3cop66dfjb37l5e0kr4monabv6p1cc1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.money_manager",
+            "certificate_hash": "ed511988a714c3d8671df599148b01e18c28bd80"
+          }
+        },
+        {
+          "client_id": "422194993173-ujjfh1ds7ortcd8r2v07iu4qo9ipg946.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR9IqIKjSjLNUNuIhpSBd_uNjzPdJKo4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422194993173-ujjfh1ds7ortcd8r2v07iu4qo9ipg946.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

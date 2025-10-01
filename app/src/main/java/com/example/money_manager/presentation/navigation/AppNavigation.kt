@@ -16,9 +16,10 @@ import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.Se
 import com.example.money_manager.presentation.ui.screens.selectIconScreen.SelectIconScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
 import com.example.money_manager.utils.TransactionType
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(googleSignInClient: GoogleSignInClient) {
     val navController = rememberNavController()
 
     NavHost(
