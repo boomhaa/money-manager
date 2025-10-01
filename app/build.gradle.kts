@@ -117,6 +117,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.charts.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)

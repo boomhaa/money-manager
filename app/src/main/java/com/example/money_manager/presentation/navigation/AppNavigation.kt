@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.money_manager.presentation.ui.screens.AuthScreen
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
@@ -79,7 +80,7 @@ fun AppNavigation(googleSignInClient: GoogleSignInClient) {
 
         composable(
             route = Screens.EditCategory.route,
-            arguments = listOf(navArgument("categoryId"){
+            arguments = listOf(navArgument("categoryId") {
                 type = NavType.LongType
             })
         ) { backStackEntry ->
@@ -87,6 +88,13 @@ fun AppNavigation(googleSignInClient: GoogleSignInClient) {
             EditCategoryScreen(
                 navController = navController,
                 categoryId = categoryId
+            )
+        }
+
+        composable(Screens.Auth.route) {
+            AuthScreen(
+                googleSignInClient = googleSignInClient,
+                navController = navController
             )
         }
     }
