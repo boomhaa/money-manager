@@ -17,14 +17,27 @@ class SyncTransactionsUseCase @Inject constructor(
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         val localTransactions = transactionRepository.getAllTransactions().first()
-        val remoteTransactions = firebaseTransactionRepository.getAllTransactionsFirebase(userId).map { it.toDomain() }
+        val remoteTransactions =
+            firebaseTransactionRepository.getAllTransactionsFirebase(userId).map { it.toDomain() }
 
         val remoteIds = remoteTransactions.map { it.globalId }.toSet()
-        val newTransactionsToRemote = localTransactions.filter { it.globalId !in remoteIds }
-        newTransactionsToRemote.forEach { firebaseTransactionRepository.insertTransactionFirebase(it.toFirebaseDto()) }
+
+        localTransactions.forEach {
+            if (it.globalId !in remoteIds) {
+                firebaseTransactionRepository.insertTransactionFirebase(it.toFirebaseDto())
+            } else {
+                firebaseTransactionRepository.updateTransactionFirebase(it.toFirebaseDto())
+            }
+        }
 
         val localIds = localTransactions.map { it.globalId }
-        val newTransactionsToLocal = remoteTransactions.filter { it.globalId !in localIds }
-        newTransactionsToLocal.forEach { transactionRepository.insertTransaction(it) }
+
+        remoteTransactions.forEach {
+            if (it.globalId !in localIds) {
+                transactionRepository.insertTransaction(it)
+            } else {
+                transactionRepository.updateTransaction(it)
+            }
+        }
     }
 }

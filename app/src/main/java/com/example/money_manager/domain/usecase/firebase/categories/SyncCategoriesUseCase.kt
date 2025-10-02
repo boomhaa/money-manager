@@ -16,15 +16,28 @@ class SyncCategoriesUseCase @Inject constructor(
     override suspend operator fun invoke() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        val localTransactions = categoryRepository.getAllCategories().first()
-        val remoteTransactions = firebaseCategoryRepository.getAllCategoriesFirebase(userId).map { it.toDomain() }
+        val localCategories = categoryRepository.getAllCategories().first()
+        val remoteCategories =
+            firebaseCategoryRepository.getAllCategoriesFirebase(userId).map { it.toDomain() }
 
-        val remoteIds = remoteTransactions.map { it.globalId }.toSet()
-        val newTransactionsToRemote = localTransactions.filter { it.globalId !in remoteIds }
-        newTransactionsToRemote.forEach { firebaseCategoryRepository.insertCategoryFirebase(it.toFirebaseDto()) }
+        val remoteIds = remoteCategories.map { it.globalId }.toSet()
 
-        val localIds = localTransactions.map { it.globalId }
-        val newTransactionsToLocal = remoteTransactions.filter { it.globalId !in localIds }
-        newTransactionsToLocal.forEach { categoryRepository.insertCategory(it) }
+        localCategories.forEach {
+            if (it.globalId !in remoteIds) {
+                firebaseCategoryRepository.insertCategoryFirebase(it.toFirebaseDto())
+            } else {
+                firebaseCategoryRepository.updateCategoryFirebase(it.toFirebaseDto())
+            }
+        }
+
+        val localIds = localCategories.map { it.globalId }
+
+        remoteCategories.forEach {
+            if (it.globalId !in localIds) {
+                categoryRepository.insertCategory(it)
+            } else {
+                categoryRepository.updateCategory(it)
+            }
+        }
     }
 }
