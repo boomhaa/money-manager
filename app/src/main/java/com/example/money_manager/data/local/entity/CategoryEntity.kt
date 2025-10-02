@@ -9,6 +9,7 @@ import com.example.money_manager.utils.TransactionType
 @Entity(tableName = "categories")
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val globalId: String,
     val name: String,
     val type: TransactionType,
     @ColumnInfo(name = "is_default") val isDefault: Boolean = false,

@@ -1,15 +1,15 @@
 package com.example.money_manager.domain.usecase.firebase.transactions
 
 import com.example.money_manager.domain.model.FirebaseTransaction
-import com.example.money_manager.domain.repository.FirebaseRepository
+import com.example.money_manager.domain.repository.FirebaseTransactionRepository
 
 import com.example.money_manager.domain.usecase.UseCase
 import javax.inject.Inject
 
 class GetAllTransactionsFirebaseUseCase @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseTransactionRepository: FirebaseTransactionRepository
 ): UseCase<String, List<FirebaseTransaction>> {
     override suspend fun invoke(params: String): List<FirebaseTransaction> {
-        return firebaseRepository.getAllTransactionsFirebase(params)
+        return firebaseTransactionRepository.getAllTransactionsFirebase(params)
     }
 }

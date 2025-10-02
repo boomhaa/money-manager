@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
@@ -139,7 +138,7 @@ fun BurgerMenu(
                     }
                     uiState.isGuest -> {
                         Column(Modifier.padding(16.dp)) {
-                            Text("Вы используете гостевой режим")
+                            Text("Гостевой режим")
                             Spacer(Modifier.height(8.dp))
                             Button(
                                 onClick = {
@@ -147,7 +146,7 @@ fun BurgerMenu(
                                     navController.navigate(Screens.Auth.route)
                                 }
                             ) {
-                                Text("Войти через Google")
+                                Text("Войти")
                             }
                         }
                     }
@@ -160,7 +159,7 @@ fun BurgerMenu(
                                 },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Войти через Google")
+                                Text("Войти")
                             }
                         }
                     }

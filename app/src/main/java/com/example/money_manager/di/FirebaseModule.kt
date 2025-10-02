@@ -1,9 +1,12 @@
 package com.example.money_manager.di
 
 import com.example.money_manager.data.repository.AuthRepositoryImpl
-import com.example.money_manager.data.repository.FirebaseRepositoryImpl
+import com.example.money_manager.data.repository.FirebaseCategoryRepositoryImpl
+import com.example.money_manager.data.repository.FirebaseTransactionRepositoryImpl
 import com.example.money_manager.domain.repository.AuthRepository
-import com.example.money_manager.domain.repository.FirebaseRepository
+import com.example.money_manager.domain.repository.CategoryRepository
+import com.example.money_manager.domain.repository.FirebaseCategoryRepository
+import com.example.money_manager.domain.repository.FirebaseTransactionRepository
 import com.example.money_manager.domain.repository.TransactionRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +34,13 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseRepository(firestore: FirebaseFirestore, transactionRepository: TransactionRepository): FirebaseRepository =
-        FirebaseRepositoryImpl(firestore, transactionRepository)
+    fun provideFirebaseTransactionRepository(firestore: FirebaseFirestore, transactionRepository: TransactionRepository): FirebaseTransactionRepository =
+        FirebaseTransactionRepositoryImpl(firestore, transactionRepository)
+
+    @Provides
+    @Singleton
+    fun provideFirebaseCategoryRepository(firestore: FirebaseFirestore, categoryRepository: CategoryRepository): FirebaseCategoryRepository =
+        FirebaseCategoryRepositoryImpl(firestore, categoryRepository)
+
+
 }

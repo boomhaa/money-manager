@@ -2,7 +2,7 @@ package com.example.money_manager.domain.repository
 
 import com.example.money_manager.domain.model.FirebaseTransaction
 
-interface FirebaseRepository {
+interface FirebaseTransactionRepository {
     suspend fun insertTransactionFirebase(transaction: FirebaseTransaction)
     suspend fun updateTransactionFirebase(transaction: FirebaseTransaction)
     suspend fun deleteTransactionFirebase(transaction: FirebaseTransaction)

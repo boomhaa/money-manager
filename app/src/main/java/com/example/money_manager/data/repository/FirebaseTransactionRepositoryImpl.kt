@@ -3,7 +3,7 @@ package com.example.money_manager.data.repository
 import android.util.Log
 import com.example.money_manager.data.mapper.toDomain
 import com.example.money_manager.domain.model.FirebaseTransaction
-import com.example.money_manager.domain.repository.FirebaseRepository
+import com.example.money_manager.domain.repository.FirebaseTransactionRepository
 import com.example.money_manager.domain.repository.TransactionRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirebaseRepositoryImpl @Inject constructor(
+class FirebaseTransactionRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val transactionRepository: TransactionRepository
-) : FirebaseRepository {
+) : FirebaseTransactionRepository {
 
     private var listenerRegistration: ListenerRegistration? = null
 

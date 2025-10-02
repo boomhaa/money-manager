@@ -1,12 +1,12 @@
 package com.example.money_manager.domain.usecase.firebase.utlis
 
-import com.example.money_manager.domain.repository.FirebaseRepository
+import com.example.money_manager.domain.repository.FirebaseTransactionRepository
 import javax.inject.Inject
 
 class RemoveTransactionListenerFirebaseUseCase @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseTransactionRepository: FirebaseTransactionRepository
 ) {
     fun execute(){
-        firebaseRepository.removeListener()
+        firebaseTransactionRepository.removeListener()
     }
 }
