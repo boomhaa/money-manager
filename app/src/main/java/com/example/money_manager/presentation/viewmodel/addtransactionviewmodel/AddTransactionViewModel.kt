@@ -5,11 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.model.Transaction
-import com.example.money_manager.domain.repository.FirebaseRepository
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.InsertTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.InsertTransactionUseCase
 import com.example.money_manager.utils.TransactionType
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +23,7 @@ import javax.inject.Inject
 class AddTransactionViewModel @Inject constructor(
     private val insertTransactionUseCase: InsertTransactionUseCase,
     private val getCategoriesUseCase: GetAllCategoriesUseCase,
-    private val firebaseRepository: FirebaseRepository
+    private val insertTransactionFirebaseUseCase: InsertTransactionFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddTransactionUiState())
@@ -77,7 +76,7 @@ class AddTransactionViewModel @Inject constructor(
                     )
 
                     insertTransactionUseCase(transaction)
-                    firebaseRepository.insertTransaction(transaction.toFirebaseDto())
+                    insertTransactionFirebaseUseCase(transaction.toFirebaseDto())
                     _uiState.value = _uiState.value.copy(isSuccess = true)
                 } else {
                     _uiState.value = _uiState.value.copy(error = "Заполните все поля")

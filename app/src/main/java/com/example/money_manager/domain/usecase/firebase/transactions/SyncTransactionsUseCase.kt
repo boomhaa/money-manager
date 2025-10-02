@@ -1,4 +1,4 @@
-package com.example.money_manager.domain.usecase.firebase
+package com.example.money_manager.domain.usecase.firebase.transactions
 
 import com.example.money_manager.data.mapper.toDomain
 import com.example.money_manager.data.mapper.toFirebaseDto
@@ -17,11 +17,11 @@ class SyncTransactionsUseCase @Inject constructor(
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         val localTransactions = transactionRepository.getAllTransactions().first()
-        val remoteTransactions = firebaseRepository.getAllTransactions(userId).map { it.toDomain() }
+        val remoteTransactions = firebaseRepository.getAllTransactionsFirebase(userId).map { it.toDomain() }
 
         val remoteIds = remoteTransactions.map { it.globalId }.toSet()
         val newTransactionsToRemote = localTransactions.filter { it.globalId !in remoteIds }
-        newTransactionsToRemote.forEach { firebaseRepository.insertTransaction(it.toFirebaseDto()) }
+        newTransactionsToRemote.forEach { firebaseRepository.insertTransactionFirebase(it.toFirebaseDto()) }
 
         val localIds = localTransactions.map { it.globalId }
         val newTransactionsToLocal = remoteTransactions.filter { it.globalId !in localIds }

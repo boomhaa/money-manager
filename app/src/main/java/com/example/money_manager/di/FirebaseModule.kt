@@ -4,6 +4,7 @@ import com.example.money_manager.data.repository.AuthRepositoryImpl
 import com.example.money_manager.data.repository.FirebaseRepositoryImpl
 import com.example.money_manager.domain.repository.AuthRepository
 import com.example.money_manager.domain.repository.FirebaseRepository
+import com.example.money_manager.domain.repository.TransactionRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -30,6 +31,6 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseRepository(firestore: FirebaseFirestore): FirebaseRepository =
-        FirebaseRepositoryImpl(firestore)
+    fun provideFirebaseRepository(firestore: FirebaseFirestore, transactionRepository: TransactionRepository): FirebaseRepository =
+        FirebaseRepositoryImpl(firestore, transactionRepository)
 }

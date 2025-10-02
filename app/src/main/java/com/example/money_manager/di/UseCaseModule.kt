@@ -9,7 +9,13 @@ import com.example.money_manager.domain.usecase.category.GetCategoriesByTypeUseC
 import com.example.money_manager.domain.usecase.category.GetCategoryByIdUseCase
 import com.example.money_manager.domain.usecase.category.InsertCategoryUseCase
 import com.example.money_manager.domain.usecase.category.UpdateCategoryUseCase
-import com.example.money_manager.domain.usecase.firebase.SyncTransactionsUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.SyncTransactionsUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.GetAllTransactionsFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.InsertTransactionFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.ObserveTransactionsFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.UpdateTransactionFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
 import com.example.money_manager.domain.usecase.transaction.GetTransactionByIdUseCase
@@ -105,5 +111,53 @@ object UseCaseModule {
         firebaseRepository: FirebaseRepository
     ): SyncTransactionsUseCase {
         return SyncTransactionsUseCase(transactionRepository, firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInsertTransactionFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): InsertTransactionFirebaseUseCase {
+        return InsertTransactionFirebaseUseCase(firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateTransactionFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): UpdateTransactionFirebaseUseCase {
+        return UpdateTransactionFirebaseUseCase(firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteTransactionFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): DeleteTransactionFirebaseUseCase {
+        return DeleteTransactionFirebaseUseCase(firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAllTransactionsFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): GetAllTransactionsFirebaseUseCase {
+        return GetAllTransactionsFirebaseUseCase(firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideObserveTransactionsFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): ObserveTransactionsFirebaseUseCase {
+        return ObserveTransactionsFirebaseUseCase(firebaseRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoveTransactionListenerFirebaseUseCase(
+        firebaseRepository: FirebaseRepository
+    ): RemoveTransactionListenerFirebaseUseCase {
+        return RemoveTransactionListenerFirebaseUseCase(firebaseRepository)
     }
 }
