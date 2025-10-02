@@ -3,6 +3,7 @@ package com.example.money_manager.presentation.viewmodel.authviewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.domain.repository.AuthRepository
+import com.example.money_manager.domain.usecase.firebase.SyncTransactionsUseCase
 import com.example.money_manager.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val prefs: PreferencesManager
+    private val prefs: PreferencesManager,
+    private val syncTransactionsUseCase: SyncTransactionsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
@@ -55,6 +57,8 @@ class AuthViewModel @Inject constructor(
             }else {
                 prefs.isGuest = false
                 prefs.isAuthorized = true
+                syncTransactionsUseCase()
+
             }
         }
     }

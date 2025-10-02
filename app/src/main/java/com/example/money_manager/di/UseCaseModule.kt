@@ -1,6 +1,7 @@
 package com.example.money_manager.di
 
 import com.example.money_manager.domain.repository.CategoryRepository
+import com.example.money_manager.domain.repository.FirebaseRepository
 import com.example.money_manager.domain.repository.TransactionRepository
 import com.example.money_manager.domain.usecase.category.DeleteCategoryUseCase
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
@@ -8,6 +9,7 @@ import com.example.money_manager.domain.usecase.category.GetCategoriesByTypeUseC
 import com.example.money_manager.domain.usecase.category.GetCategoryByIdUseCase
 import com.example.money_manager.domain.usecase.category.InsertCategoryUseCase
 import com.example.money_manager.domain.usecase.category.UpdateCategoryUseCase
+import com.example.money_manager.domain.usecase.firebase.SyncTransactionsUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
 import com.example.money_manager.domain.usecase.transaction.GetTransactionByIdUseCase
@@ -26,31 +28,31 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetAllTransactionsUseCase(repository: TransactionRepository): GetAllTransactionsUseCase{
+    fun provideGetAllTransactionsUseCase(repository: TransactionRepository): GetAllTransactionsUseCase {
         return GetAllTransactionsUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetTransactionByIdUseCase(repository: TransactionRepository): GetTransactionByIdUseCase{
+    fun provideGetTransactionByIdUseCase(repository: TransactionRepository): GetTransactionByIdUseCase {
         return GetTransactionByIdUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetTransactionsByTypeUseCase(repository: TransactionRepository): GetTransactionsByTypeUseCase{
+    fun provideGetTransactionsByTypeUseCase(repository: TransactionRepository): GetTransactionsByTypeUseCase {
         return GetTransactionsByTypeUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideInsertTransactionUseCase(repository: TransactionRepository): InsertTransactionUseCase{
+    fun provideInsertTransactionUseCase(repository: TransactionRepository): InsertTransactionUseCase {
         return InsertTransactionUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideUpdateTransactionUseCase(repository: TransactionRepository): UpdateTransactionUseCase{
+    fun provideUpdateTransactionUseCase(repository: TransactionRepository): UpdateTransactionUseCase {
         return UpdateTransactionUseCase(repository)
     }
 
@@ -62,25 +64,25 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetAllCategoriesUseCase(repository: CategoryRepository): GetAllCategoriesUseCase{
+    fun provideGetAllCategoriesUseCase(repository: CategoryRepository): GetAllCategoriesUseCase {
         return GetAllCategoriesUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetCategoriesByTypeUseCase(repository: CategoryRepository): GetCategoriesByTypeUseCase{
+    fun provideGetCategoriesByTypeUseCase(repository: CategoryRepository): GetCategoriesByTypeUseCase {
         return GetCategoriesByTypeUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetCategoryByIdUseCase(repository: CategoryRepository): GetCategoryByIdUseCase{
+    fun provideGetCategoryByIdUseCase(repository: CategoryRepository): GetCategoryByIdUseCase {
         return GetCategoryByIdUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideInsertCategoryUseCase(repository: CategoryRepository): InsertCategoryUseCase{
+    fun provideInsertCategoryUseCase(repository: CategoryRepository): InsertCategoryUseCase {
         return InsertCategoryUseCase(repository)
     }
 
@@ -92,7 +94,16 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideDeleteCategoryUseCase(repository: CategoryRepository): DeleteCategoryUseCase{
+    fun provideDeleteCategoryUseCase(repository: CategoryRepository): DeleteCategoryUseCase {
         return DeleteCategoryUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSyncTransactionsUseCase(
+        transactionRepository: TransactionRepository,
+        firebaseRepository: FirebaseRepository
+    ): SyncTransactionsUseCase {
+        return SyncTransactionsUseCase(transactionRepository, firebaseRepository)
     }
 }

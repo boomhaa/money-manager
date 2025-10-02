@@ -33,7 +33,6 @@ fun TransactionItem(
     val transaction = item.transaction
     val category = item.category
     val formattedDate = transaction.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
-    val formattedTime = transaction.date.format(DateTimeFormatter.ofPattern("HH:mm"))
 
     val isExpense = transaction.type == TransactionType.EXPENSE
     val amountColor = if (isExpense) Error500 else Success500
@@ -109,11 +108,6 @@ fun TransactionItem(
                     )
                     Text(
                         text = "•",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = formattedTime,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

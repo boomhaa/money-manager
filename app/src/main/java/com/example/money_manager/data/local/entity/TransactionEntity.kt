@@ -7,6 +7,7 @@ import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.money_manager.utils.TransactionType
+import java.util.UUID
 
 @Entity(
     tableName = "transactions",
@@ -20,6 +21,7 @@ import com.example.money_manager.utils.TransactionType
 )
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val globalId: String,
     val amount: Double,
     val type: TransactionType,
     @ColumnInfo(name = "category_id") val categoryId: Long,
