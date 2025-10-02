@@ -2,8 +2,10 @@ package com.example.money_manager.presentation.viewmodel.edittransactionviewmode
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.UpdateTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.GetTransactionByIdUseCase
 import com.example.money_manager.domain.usecase.transaction.UpdateTransactionUseCase
 import com.example.money_manager.utils.TransactionType
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class EditTransactionViewModel @Inject constructor(
     private val getTransactionByIdUseCase: GetTransactionByIdUseCase,
     private val updateTransactionUseCase: UpdateTransactionUseCase,
-    private val getCategoriesUseCase: GetAllCategoriesUseCase
+    private val getCategoriesUseCase: GetAllCategoriesUseCase,
+    private val updateTransactionFirebaseUseCase: UpdateTransactionFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EditTransactionUiState(isLoading = true))
@@ -88,6 +91,7 @@ class EditTransactionViewModel @Inject constructor(
                     )
 
                     updateTransactionUseCase(updatedTransaction)
+                    updateTransactionFirebaseUseCase(updatedTransaction.toFirebaseDto())
                     _uiState.value = _uiState.value.copy(isSuccess = true)
                 } else {
                     _uiState.value = _uiState.value.copy(error = "Заполните все обязательные поля")

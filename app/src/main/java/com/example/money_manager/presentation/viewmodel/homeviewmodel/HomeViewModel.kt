@@ -2,10 +2,16 @@ package com.example.money_manager.presentation.viewmodel.homeviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.domain.model.TransactionsSummary
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.firebase.categories.ObserveCategoriesFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.ObserveTransactionsFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
+import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
 import com.example.money_manager.utils.TransactionType
@@ -23,7 +29,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
-    private val deleteTransactionUseCase: DeleteTransactionUseCase
+    private val deleteTransactionUseCase: DeleteTransactionUseCase,
+    private val deleteTransactionFirebaseUseCase: DeleteTransactionFirebaseUseCase,
+    private val observeTransactionsFirebaseUseCase: ObserveTransactionsFirebaseUseCase,
+    private val removeTransactionListenerFirebaseUseCase: RemoveTransactionListenerFirebaseUseCase,
+    private val observeCategoriesFirebaseUseCase: ObserveCategoriesFirebaseUseCase,
+    private val removeCategoryListenerFirebaseUseCase: RemoveCategoryListenerFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
@@ -31,6 +42,10 @@ class HomeViewModel @Inject constructor(
 
     init {
         observerTransactions()
+        viewModelScope.launch {
+            observeTransactionsFirebaseUseCase()
+            observeCategoriesFirebaseUseCase()
+        }
     }
 
     private fun observerTransactions() {
@@ -87,9 +102,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteTransactionUseCase(transaction)
+                deleteTransactionFirebaseUseCase(transaction.toFirebaseDto())
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        removeTransactionListenerFirebaseUseCase.execute()
+        removeCategoryListenerFirebaseUseCase.execute()
     }
 }

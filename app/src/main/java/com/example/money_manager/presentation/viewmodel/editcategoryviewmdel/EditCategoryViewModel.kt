@@ -2,8 +2,10 @@ package com.example.money_manager.presentation.viewmodel.editcategoryviewmdel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.usecase.category.GetCategoryByIdUseCase
 import com.example.money_manager.domain.usecase.category.UpdateCategoryUseCase
+import com.example.money_manager.domain.usecase.firebase.categories.UpdateCategoryFirebaseUseCase
 import com.example.money_manager.utils.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditCategoryViewModel @Inject constructor(
     private val getCategoryByIdUseCase: GetCategoryByIdUseCase,
-    private val updateCategoryUseCase: UpdateCategoryUseCase
+    private val updateCategoryUseCase: UpdateCategoryUseCase,
+    private val updateCategoryFirebaseUseCase: UpdateCategoryFirebaseUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EditCategoryUiState())
     val uiState: StateFlow<EditCategoryUiState> = _uiState.asStateFlow()
@@ -65,6 +68,7 @@ class EditCategoryViewModel @Inject constructor(
                         iconName = _uiState.value.iconName
                     )
                     updateCategoryUseCase(updatedCategory)
+                    updateCategoryFirebaseUseCase(updatedCategory.toFirebaseDto())
                     _uiState.value = _uiState.value.copy(isSuccess = true)
                 } else {
                     _uiState.value = _uiState.value.copy(error = "Заполните все обязательные поля")

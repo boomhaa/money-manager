@@ -2,9 +2,11 @@ package com.example.money_manager.presentation.viewmodel.categoriesviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.usecase.category.DeleteCategoryUseCase
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.firebase.categories.DeleteCategoryFirebaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
-    private val deleteCategoryUseCase: DeleteCategoryUseCase
+    private val deleteCategoryUseCase: DeleteCategoryUseCase,
+    private val deleteCategoryFirebaseUseCase: DeleteCategoryFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CategoriesUiState())
@@ -46,6 +49,7 @@ class CategoriesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteCategoryUseCase(category)
+                deleteCategoryFirebaseUseCase(category.toFirebaseDto())
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(error = e.message)
             }

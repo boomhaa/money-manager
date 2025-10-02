@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.google.gms.google.services)
+
 }
 
 
@@ -92,6 +94,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodule.compose)
 
     implementation(libs.hilt.android)
+    implementation(libs.firebase.auth)
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.appcompat)
@@ -110,6 +117,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.charts.compose)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
+    implementation("com.google.firebase:firebase-firestore-ktx:24.6.0")
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)

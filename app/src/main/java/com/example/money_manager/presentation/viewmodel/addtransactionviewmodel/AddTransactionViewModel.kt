@@ -2,9 +2,11 @@ package com.example.money_manager.presentation.viewmodel.addtransactionviewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.firebase.transactions.InsertTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.InsertTransactionUseCase
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,12 +16,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
     private val insertTransactionUseCase: InsertTransactionUseCase,
-    private val getCategoriesUseCase: GetAllCategoriesUseCase
+    private val getCategoriesUseCase: GetAllCategoriesUseCase,
+    private val insertTransactionFirebaseUseCase: InsertTransactionFirebaseUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddTransactionUiState())
@@ -64,6 +68,7 @@ class AddTransactionViewModel @Inject constructor(
                 if (amount > 0 && _uiState.value.selectedCategory != null) {
                     val transaction = Transaction(
                         amount = amount,
+                        globalId = UUID.randomUUID().toString(),
                         type = _uiState.value.transactionType,
                         categoryId = _uiState.value.selectedCategory!!.id,
                         date = _uiState.value.date,
@@ -71,6 +76,7 @@ class AddTransactionViewModel @Inject constructor(
                     )
 
                     insertTransactionUseCase(transaction)
+                    insertTransactionFirebaseUseCase(transaction.toFirebaseDto())
                     _uiState.value = _uiState.value.copy(isSuccess = true)
                 } else {
                     _uiState.value = _uiState.value.copy(error = "Заполните все поля")

@@ -2,16 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1bc8f021eaa660d321209b0281f4e972",
+    "identityHash": "230499f8c2ba9f73b710a1b342733953",
     "entities": [
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL NOT NULL, `type` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `description` TEXT, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `globalId` TEXT NOT NULL, `amount` REAL NOT NULL, `type` TEXT NOT NULL, `category_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `description` TEXT, `timestamp` INTEGER NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `categories`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "globalId",
+            "columnName": "globalId",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -134,7 +140,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1bc8f021eaa660d321209b0281f4e972')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '230499f8c2ba9f73b710a1b342733953')"
     ]
   }
 }

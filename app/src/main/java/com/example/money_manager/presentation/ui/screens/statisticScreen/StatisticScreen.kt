@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import com.example.money_manager.presentation.components.BeautifulCard
 import com.example.money_manager.presentation.components.BurgerMenu
 import com.example.money_manager.presentation.components.DatePickerField
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthUiState
+import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.ScreenMenuList
 import com.example.money_manager.utils.generateColor
 import kotlinx.coroutines.launch
@@ -37,7 +39,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun StatisticsScreen(
     navController: NavController,
-    viewModel: StatisticViewModel = hiltViewModel()
+    viewModel: StatisticViewModel = hiltViewModel(),
+    authUiState: AuthUiState,
+    signOut: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -46,7 +50,9 @@ fun StatisticsScreen(
     BurgerMenu(
         navController = navController,
         drawerState = drawerState,
-        menuItems = ScreenMenuList.screenMenuList
+        menuItems = ScreenMenuList.screenMenuList,
+        uiState = authUiState,
+        signOut = signOut
     )
     {
         Scaffold(
