@@ -1,24 +1,17 @@
 package com.example.money_manager.data.repository
 
 import android.util.Log
-import com.example.money_manager.data.mapper.toDomain
 import com.example.money_manager.domain.model.FirebaseCategory
 import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.FirebaseCategoryRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseCategoryRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
-    private val categoryRepository: CategoryRepository
 ): FirebaseCategoryRepository {
 
     private var listenerRegistration: ListenerRegistration? = null
@@ -70,51 +63,6 @@ class FirebaseCategoryRepositoryImpl @Inject constructor(
         return categories.toObjects(FirebaseCategory::class.java)
     }
 
-    override fun observeCategories() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        listenerRegistration?.remove()
-
-        listenerRegistration = firestore
-            .collection("users")
-            .document(userId)
-            .collection("categories")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.e("Firebase", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-
-                if (snapshot != null) {
-
-
-                    CoroutineScope(Dispatchers.IO).launch {
-
-                        val localCategories = categoryRepository.getAllCategories().first()
-                        val localIds = localCategories.map { it.globalId }
-                        for (dc in snapshot.documentChanges) {
-                            val category =
-                                dc.document.toObject(FirebaseCategory::class.java).toDomain()
-
-                            when (dc.type) {
-                                DocumentChange.Type.ADDED -> {
-                                    if (category.globalId !in localIds) {
-                                        categoryRepository.insertCategory(category)
-                                    }
-                                }
-
-                                DocumentChange.Type.MODIFIED -> {
-                                    categoryRepository.updateCategory(category)
-                                }
-
-                                DocumentChange.Type.REMOVED -> {
-                                    categoryRepository.deleteCategory(category)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    }
 
     override fun removeListener() {
         listenerRegistration?.remove()

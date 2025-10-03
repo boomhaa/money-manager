@@ -37,4 +37,7 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun deleteTransaction(transaction: Transaction) {
         transactionDao.deleteTransaction(transaction.toTransactionEntity())
     }
+    override suspend fun deleteAllTransactions() {
+        transactionDao.deleteAllTransactions()
+    }
 }

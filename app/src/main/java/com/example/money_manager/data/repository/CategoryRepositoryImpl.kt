@@ -37,4 +37,8 @@ class CategoryRepositoryImpl @Inject constructor(
     override suspend fun deleteCategory(category: Category) {
         categoryDao.deleteCategory(category.toCategoryEntity())
     }
+
+    override suspend fun deleteAllCategories() {
+        categoryDao.clearAllNonDefault()
+    }
 }

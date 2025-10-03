@@ -7,6 +7,5 @@ interface FirebaseTransactionRepository {
     suspend fun updateTransactionFirebase(transaction: FirebaseTransaction)
     suspend fun deleteTransactionFirebase(transaction: FirebaseTransaction)
     suspend fun getAllTransactionsFirebase(userId: String): List<FirebaseTransaction>
-    fun observeTransactions()
     fun removeListener()
 }
