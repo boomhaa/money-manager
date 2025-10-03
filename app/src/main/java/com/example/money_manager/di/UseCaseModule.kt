@@ -13,14 +13,12 @@ import com.example.money_manager.domain.usecase.category.UpdateCategoryUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.DeleteCategoryFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.GetAllCategoriesFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.InsertCategoryFirebaseUseCase
-import com.example.money_manager.domain.usecase.firebase.categories.ObserveCategoriesFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.SyncCategoriesUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.UpdateCategoryFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.SyncTransactionsUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.GetAllTransactionsFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.InsertTransactionFirebaseUseCase
-import com.example.money_manager.domain.usecase.firebase.transactions.ObserveTransactionsFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.UpdateTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
@@ -155,14 +153,6 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideObserveTransactionsFirebaseUseCase(
-        firebaseTransactionRepository: FirebaseTransactionRepository
-    ): ObserveTransactionsFirebaseUseCase {
-        return ObserveTransactionsFirebaseUseCase(firebaseTransactionRepository)
-    }
-
-    @Provides
-    @Singleton
     fun provideRemoveTransactionListenerFirebaseUseCase(
         firebaseTransactionRepository: FirebaseTransactionRepository
     ): RemoveTransactionListenerFirebaseUseCase {
@@ -199,14 +189,6 @@ object UseCaseModule {
         firebaseCategoryRepository: FirebaseCategoryRepository
     ): GetAllCategoriesFirebaseUseCase {
         return GetAllCategoriesFirebaseUseCase(firebaseCategoryRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideObserveCategoriesFirebaseUseCase(
-        firebaseCategoryRepository: FirebaseCategoryRepository
-    ): ObserveCategoriesFirebaseUseCase {
-        return ObserveCategoriesFirebaseUseCase(firebaseCategoryRepository)
     }
 
     @Provides

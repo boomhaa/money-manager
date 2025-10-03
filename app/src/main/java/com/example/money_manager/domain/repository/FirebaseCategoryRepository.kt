@@ -7,6 +7,5 @@ interface FirebaseCategoryRepository {
     suspend fun updateCategoryFirebase(category: FirebaseCategory)
     suspend fun deleteCategoryFirebase(category: FirebaseCategory)
     suspend fun getAllCategoriesFirebase(userId: String): List<FirebaseCategory>
-    fun observeCategories()
     fun removeListener()
 }

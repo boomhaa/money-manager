@@ -7,9 +7,7 @@ import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.domain.model.TransactionsSummary
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
-import com.example.money_manager.domain.usecase.firebase.categories.ObserveCategoriesFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
-import com.example.money_manager.domain.usecase.firebase.transactions.ObserveTransactionsFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
@@ -31,9 +29,7 @@ class HomeViewModel @Inject constructor(
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
     private val deleteTransactionFirebaseUseCase: DeleteTransactionFirebaseUseCase,
-    private val observeTransactionsFirebaseUseCase: ObserveTransactionsFirebaseUseCase,
     private val removeTransactionListenerFirebaseUseCase: RemoveTransactionListenerFirebaseUseCase,
-    private val observeCategoriesFirebaseUseCase: ObserveCategoriesFirebaseUseCase,
     private val removeCategoryListenerFirebaseUseCase: RemoveCategoryListenerFirebaseUseCase
 ) : ViewModel() {
 
@@ -42,10 +38,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         observerTransactions()
-        viewModelScope.launch {
-            observeTransactionsFirebaseUseCase()
-            observeCategoriesFirebaseUseCase()
-        }
     }
 
     private fun observerTransactions() {

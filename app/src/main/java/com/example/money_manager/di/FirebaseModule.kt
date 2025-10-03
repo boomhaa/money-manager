@@ -7,7 +7,6 @@ import com.example.money_manager.domain.repository.AuthRepository
 import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.FirebaseCategoryRepository
 import com.example.money_manager.domain.repository.FirebaseTransactionRepository
-import com.example.money_manager.domain.repository.TransactionRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -34,13 +33,11 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseTransactionRepository(firestore: FirebaseFirestore, transactionRepository: TransactionRepository): FirebaseTransactionRepository =
-        FirebaseTransactionRepositoryImpl(firestore, transactionRepository)
+    fun provideFirebaseTransactionRepository(firestore: FirebaseFirestore): FirebaseTransactionRepository =
+        FirebaseTransactionRepositoryImpl(firestore)
 
     @Provides
     @Singleton
-    fun provideFirebaseCategoryRepository(firestore: FirebaseFirestore, categoryRepository: CategoryRepository): FirebaseCategoryRepository =
-        FirebaseCategoryRepositoryImpl(firestore, categoryRepository)
-
-
+    fun provideFirebaseCategoryRepository(firestore: FirebaseFirestore): FirebaseCategoryRepository =
+        FirebaseCategoryRepositoryImpl(firestore)
 }

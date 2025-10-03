@@ -27,4 +27,6 @@ sealed class Screens(val route: String) {
     object Categories : Screens("categories")
     object SelectIcon: Screens("selectIcon")
     object Auth: Screens("auth")
+    object Settings: Screens("settings")
+    object DataSettings: Screens("dataSettings")
 }

@@ -12,11 +12,13 @@ import com.example.money_manager.presentation.ui.screens.authScreen.AuthScreen
 import com.example.money_manager.presentation.ui.screens.addCategoryScreen.AddCategoryScreen
 import com.example.money_manager.presentation.ui.screens.addTransactionScreen.AddTransactionScreen
 import com.example.money_manager.presentation.ui.screens.categoriesScreen.CategoriesScreen
+import com.example.money_manager.presentation.ui.screens.dataSettingsScreen.DataSettingsScreen
 import com.example.money_manager.presentation.ui.screens.editCategoryScreen.EditCategoryScreen
 import com.example.money_manager.presentation.ui.screens.editTransactionScreen.EditTransactionScreen
 import com.example.money_manager.presentation.ui.screens.homeScreen.HomeScreen
 import com.example.money_manager.presentation.ui.screens.selectCategoryScreen.SelectCategoryScreen
 import com.example.money_manager.presentation.ui.screens.selectIconScreen.SelectIconScreen
+import com.example.money_manager.presentation.ui.screens.settingsScreen.SettingsScreen
 import com.example.money_manager.presentation.ui.screens.statisticScreen.StatisticsScreen
 import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.TransactionType
@@ -42,7 +44,7 @@ fun AppNavigation(
             HomeScreen(
                 navController = navController,
                 authUiState = uiState.value,
-                signOut =  authViewModel::signOut
+                signOut = authViewModel::signOut
             )
         }
 
@@ -93,7 +95,7 @@ fun AppNavigation(
             CategoriesScreen(
                 navController = navController,
                 authUiState = uiState.value,
-                signOut =  authViewModel::signOut
+                signOut = authViewModel::signOut
             )
         }
 
@@ -120,6 +122,18 @@ fun AppNavigation(
                 navController = navController,
                 viewModel = authViewModel
             )
+        }
+
+        composable(Screens.Settings.route) {
+            SettingsScreen(
+                navController = navController,
+                authUiState = uiState.value,
+                signOut = authViewModel::signOut
+            )
+        }
+
+        composable(Screens.DataSettings.route) {
+            DataSettingsScreen(navController = navController)
         }
     }
 }

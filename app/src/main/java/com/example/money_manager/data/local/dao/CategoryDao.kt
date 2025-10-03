@@ -1,11 +1,6 @@
 package com.example.money_manager.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.money_manager.data.local.entity.CategoryEntity
 import com.example.money_manager.utils.TransactionType
 import kotlinx.coroutines.flow.Flow
@@ -36,4 +31,7 @@ interface CategoryDao {
 
     @Query("SELECT COUNT(*) FROM categories")
     suspend fun getCount(): Int
+
+    @Query("DELETE FROM categories WHERE is_default = 0")
+    suspend fun clearAllNonDefault()
 }
