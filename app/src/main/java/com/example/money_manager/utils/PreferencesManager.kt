@@ -16,6 +16,7 @@ class PreferencesManager @Inject constructor(
     companion object {
         const val IS_GUEST = "is_guest"
         const val IS_AUTHORIZED = "is_authorized"
+        const val CURRENCY = "selected_currency"
     }
 
     var isGuest: Boolean
@@ -25,4 +26,8 @@ class PreferencesManager @Inject constructor(
     var isAuthorized: Boolean
         get() = prefs.getBoolean(IS_AUTHORIZED, false)
         set(value) = prefs.edit { putBoolean(IS_AUTHORIZED, value) }
+
+    var currency: String
+        get() = prefs.getString(CURRENCY, "RUB").toString()
+        set(value) = prefs.edit { putString(CURRENCY, value) }
 }

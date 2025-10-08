@@ -25,6 +25,7 @@ mockk = "1.13.8"
 mockkAndroid = "1.13.8"
 navigation = "2.9.3"
 hilt = "2.57.1"
+playServicesAuth = "21.2.0"
 room = "2.7.2"
 datastore = "1.1.7"
 coroutines = "1.10.2"
@@ -44,6 +45,8 @@ credentials = "1.5.0"
 credentialsPlayServicesAuth = "1.5.0"
 googleid = "1.1.1"
 material3 = "1.4.0"
+retrofit = "2.9.0"
+converterGson = "2.9.0"
 
 
 [libraries]
@@ -75,6 +78,10 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 charts-compose = { module = "com.github.tehras:charts", version = "0.2.4-alpha" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
+
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
