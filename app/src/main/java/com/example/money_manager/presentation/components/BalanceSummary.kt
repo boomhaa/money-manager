@@ -36,6 +36,7 @@ import com.example.money_manager.presentation.theme.Primary500
 @Composable
 fun BalanceSummary(
     balance: Double,
+    symbol: String,
     totalIncome: Double,
     totalExpense: Double,
     modifier: Modifier = Modifier
@@ -58,7 +59,8 @@ fun BalanceSummary(
                 title = "Общий баланс",
                 amount = balance,
                 icon = Icons.Default.AttachMoney,
-                isMain = true
+                isMain = true,
+                symbol = symbol
             )
             
             Spacer(modifier = Modifier.height(16.dp))
@@ -73,7 +75,8 @@ fun BalanceSummary(
                     amount = totalIncome,
                     icon = Icons.Default.KeyboardArrowUp,
                     isMain = false,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    symbol = symbol
                 )
                 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -83,7 +86,8 @@ fun BalanceSummary(
                     amount = totalExpense,
                     icon = Icons.Default.KeyboardArrowDown,
                     isMain = false,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    symbol = symbol
                 )
             }
         }
@@ -94,6 +98,7 @@ fun BalanceSummary(
 private fun BalanceCard(
     title: String,
     amount: Double,
+    symbol: String,
     icon: ImageVector,
     isMain: Boolean,
     modifier: Modifier = Modifier
@@ -162,7 +167,7 @@ private fun BalanceCard(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = formatCurrency(amount),
+                text = formatCurrency(amount, symbol),
                 style = if (isMain) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
                 color = amountColor,
                 fontWeight = FontWeight.Bold
@@ -171,6 +176,6 @@ private fun BalanceCard(
     }
 }
 
-private fun formatCurrency(amount: Double): String {
-    return "%.2f ₽".format(amount)
+private fun formatCurrency(amount: Double, symbol: String): String {
+    return "%.2f $symbol".format(amount)
 }

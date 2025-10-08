@@ -5,11 +5,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface CurrencyApi{
-    @GET("/convert")
+    @GET("convert")
     suspend fun convertCurrency(
-        @Query("form") from: String,
+        @Query("from") from: String,
         @Query("to") to: String,
         @Query("amount") amount: Double,
     ): CurrencyResponseDto
-
 }

@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TransactionItem(
     item: TransactionWithCategory,
+    symbol: String,
     onEdit: (Long) -> Unit,
     onDelete: (Long) -> Unit
 ) {
@@ -118,7 +119,7 @@ fun TransactionItem(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = "${if (isExpense) "-" else "+"}${String.format("%.2f", transaction.amount)} ₽",
+                    text = "${if (isExpense) "-" else "+"}${String.format("%.2f", transaction.amount)} $symbol",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = amountColor

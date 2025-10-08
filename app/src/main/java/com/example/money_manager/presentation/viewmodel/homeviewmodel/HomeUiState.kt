@@ -1,5 +1,6 @@
 package com.example.money_manager.presentation.viewmodel.homeviewmodel
 
+import com.example.money_manager.domain.model.Currency
 import com.example.money_manager.domain.model.TransactionWithCategory
 
 data class HomeUiState(

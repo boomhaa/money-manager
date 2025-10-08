@@ -98,7 +98,8 @@ fun HomeScreen(
                             BalanceSummary(
                                 balance = uiState.balance,
                                 totalIncome = uiState.totalIncome,
-                                totalExpense = uiState.totalExpense
+                                totalExpense = uiState.totalExpense,
+                                symbol = homeViewModel.getSymbol()
                             )
                         }
                     }
@@ -168,6 +169,7 @@ fun HomeScreen(
                             items(uiState.transactions) { item ->
                                 TransactionItem(
                                     item = item,
+                                    symbol = homeViewModel.getSymbol(),
                                     onEdit = { id ->
                                         navController.navigate(
                                             Screens.EditTransaction.createRoute(

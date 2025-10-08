@@ -7,6 +7,7 @@ data class FirebaseTransaction(
     val globalId: String = "",
     val amount: Double = 0.0,
     val type: String = TransactionType.EXPENSE.name,
+    val currencyCode: String = "RUB",
     val categoryId: Long = 0,
     val date: Long = System.currentTimeMillis(),
     val description: String? = null,

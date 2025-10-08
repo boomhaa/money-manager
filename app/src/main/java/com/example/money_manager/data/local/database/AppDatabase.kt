@@ -15,7 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [TransactionEntity::class, CategoryEntity::class], version = 3)
+@Database(entities = [TransactionEntity::class, CategoryEntity::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
