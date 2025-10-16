@@ -8,6 +8,7 @@ data class Transaction(
     val id: Long = 0,
     val globalId: String = "",
     var amount: Double = 0.0,
+    var addAmount: Double = 0.0,
     val type: TransactionType = TransactionType.EXPENSE,
     val categoryId: Long = 0,
     val currencyCode: String = "RUB",

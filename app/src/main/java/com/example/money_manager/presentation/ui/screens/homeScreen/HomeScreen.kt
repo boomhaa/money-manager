@@ -26,7 +26,6 @@ import com.example.money_manager.presentation.components.TransactionItem
 import com.example.money_manager.presentation.components.WelcomeCard
 import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthUiState
-import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.ScreenMenuList
 import kotlinx.coroutines.launch
 
@@ -179,7 +178,8 @@ fun HomeScreen(
                                     },
                                     onDelete = { id ->
                                         homeViewModel.deleteTransaction(transaction = item.transaction)
-                                    }
+                                    },
+                                    transactionSymbol = homeViewModel.getTransactionSymbol(item.transaction.currencyCode)
                                 )
                             }
                         }

@@ -9,6 +9,7 @@ import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.domain.model.TransactionsSummary
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
 import com.example.money_manager.domain.usecase.currency.ConvertCurrencyUseCase
+import com.example.money_manager.domain.usecase.currency.GetAllCurrenciesUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
@@ -30,6 +31,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
+    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
     private val deleteTransactionFirebaseUseCase: DeleteTransactionFirebaseUseCase,
     private val removeTransactionListenerFirebaseUseCase: RemoveTransactionListenerFirebaseUseCase,
@@ -42,9 +44,16 @@ class HomeViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadCurrencies()
         observerTransactions()
     }
 
+    private fun loadCurrencies(){
+        viewModelScope.launch {
+            val currencies = getAllCurrenciesUseCase()
+            _uiState.value = _uiState.value.copy(currencies = currencies)
+        }
+    }
     private fun observerTransactions() {
         viewModelScope.launch {
             combine(
@@ -68,17 +77,17 @@ class HomeViewModel @Inject constructor(
                         transaction.amount
                     }
                     val category = categories.find { it.id == transaction.categoryId }
-                    category?.let { TransactionWithCategory(transaction.copy(amount = newAmount), it) }
+                    category?.let { TransactionWithCategory(transaction.copy(addAmount = newAmount), it) }
                 }
 
 
                 val totalIncome = transactionWithCategory
                     .filter { it.transaction.type == TransactionType.INCOME }
-                    .sumOf { it.transaction.amount }
+                    .sumOf { it.transaction.addAmount }
 
                 val totalExpense = transactionWithCategory
                     .filter { it.transaction.type == TransactionType.EXPENSE }
-                    .sumOf { it.transaction.amount }
+                    .sumOf { it.transaction.addAmount }
 
                 val totalBalance = totalIncome - totalExpense
 
@@ -126,6 +135,10 @@ class HomeViewModel @Inject constructor(
 
     fun getSymbol(): String{
         return prefs.currency.symbol
+    }
+
+    fun getTransactionSymbol(code: String): String{
+        return _uiState.value.currencies.first { it.code == code }.symbol
     }
 
     override fun onCleared() {

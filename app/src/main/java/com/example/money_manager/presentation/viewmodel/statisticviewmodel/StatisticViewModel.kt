@@ -40,15 +40,15 @@ class StatisticViewModel @Inject constructor(
         viewModelScope.launch {
             getAllTransactionsUseCase().collect { transactions ->
                 val income =
-                    transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount }
+                    transactions.filter { it.type == TransactionType.INCOME }.sumOf { it.addAmount }
                 val expense =
-                    transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
+                    transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.addAmount }
                 val balance = income - expense
 
                 val expenseByCategory = transactions
                     .filter { it.type == TransactionType.EXPENSE }
                     .groupBy { getCategoryByIdUseCase(it.categoryId).name }
-                    .mapValues { entry -> entry.value.sumOf { it.amount } }
+                    .mapValues { entry -> entry.value.sumOf { it.addAmount } }
 
                 val filteredTransactions = transactions
                     .filter { it.type == TransactionType.EXPENSE }
@@ -59,7 +59,7 @@ class StatisticViewModel @Inject constructor(
 
                 val transactionOverTime = filteredTransactions
                     .groupBy { it.date.toLocalDate() }
-                    .mapValues { entry -> entry.value.sumOf { it.amount } }
+                    .mapValues { entry -> entry.value.sumOf { it.addAmount } }
                     .toSortedMap()
 
                 _uiState.value = _uiState.value.copy(
