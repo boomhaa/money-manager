@@ -1,6 +1,7 @@
 package com.example.money_manager.data.store
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -14,12 +15,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.json.JSONObject
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private val KEY_LOCK_ENABLED = booleanPreferencesKey("lock_enabled")
 private val KEY_BIOMETRIC_ENABLED = booleanPreferencesKey("biometric_enabled")
 private val KEY_LOCK_TIMEOUT_SEC = intPreferencesKey("lock_timeout_sec")
 private val KEY_ENCRYPTED_PIN_BLOB = stringPreferencesKey("enc_pin_blob")
 
+@Singleton
 class AppLockStore @Inject constructor(
     @ApplicationContext context: Context,
     private val crypto: AppLockCrypto
@@ -50,7 +53,9 @@ class AppLockStore @Inject constructor(
         }
     }.getOrNull()
 
-    suspend fun setLockEnable(state: Boolean) = ds.edit { it[KEY_LOCK_ENABLED] = state }
+    suspend fun setLockEnable(state: Boolean) = ds.edit { it[KEY_LOCK_ENABLED] = state
+        Log.d("AppLockStore", "set value of KEY_LOCK_ENABLED to $state and now the value of KEY_LOCK_ENABLED is ${it[KEY_LOCK_ENABLED]}")
+    }
     suspend fun setBiometricEnable(state: Boolean) = ds.edit { it[KEY_BIOMETRIC_ENABLED] = state }
     suspend fun setTimeoutSec(seconds: Int) = ds.edit { it[KEY_LOCK_TIMEOUT_SEC] = seconds }
 }

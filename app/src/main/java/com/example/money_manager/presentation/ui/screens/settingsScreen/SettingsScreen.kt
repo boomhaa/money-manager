@@ -60,6 +60,11 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { navController.navigate(Screens.DataSettings.route) }
                 )
                 HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+                ListItem(
+                    headlineContent = { Text("Безопасность") },
+                    modifier = Modifier.clickable { navController.navigate(Screens.SecureSettings.route) }
+                )
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
             }
         }
     }

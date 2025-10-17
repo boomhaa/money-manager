@@ -29,4 +29,5 @@ sealed class Screens(val route: String) {
     object Auth: Screens("auth")
     object Settings: Screens("settings")
     object DataSettings: Screens("dataSettings")
+    object SecureSettings: Screens("secureSettings")
 }

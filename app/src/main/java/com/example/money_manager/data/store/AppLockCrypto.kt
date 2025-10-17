@@ -15,9 +15,10 @@ class AppLockCrypto @Inject constructor(
     @ApplicationContext context: Context
 ) {
     private val aead: Aead by lazy {
+        val keyManager = AesGcmKeyManager.aes256GcmTemplate()
         val handle = AndroidKeysetManager.Builder()
             .withSharedPref(context, "app_lock_keyset", "app_lock_prefs")
-            .withKeyTemplate(AesGcmKeyManager.aes256GcmTemplate())
+            .withKeyTemplate(keyManager)
             .withMasterKeyUri("android-keystore://app_lock_master_key")
             .build()
             .keysetHandle
