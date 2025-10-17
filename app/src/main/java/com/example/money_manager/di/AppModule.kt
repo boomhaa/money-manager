@@ -4,8 +4,12 @@ import android.content.Context
 import com.example.money_manager.data.local.dao.CategoryDao
 import com.example.money_manager.data.local.dao.TransactionDao
 import com.example.money_manager.data.local.database.AppDatabase
+import com.example.money_manager.data.repository.AppLockRepositoryImpl
 import com.example.money_manager.data.repository.CategoryRepositoryImpl
 import com.example.money_manager.data.repository.TransactionRepositoryImpl
+import com.example.money_manager.data.store.AppLockStore
+import com.example.money_manager.data.store.PinHasher
+import com.example.money_manager.domain.repository.AppLockRepository
 import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.TransactionRepository
 import com.example.money_manager.utils.PreferencesManager
@@ -45,6 +49,12 @@ object AppModule {
         transactionDao: TransactionDao
     ): TransactionRepository {
         return TransactionRepositoryImpl(transactionDao = transactionDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppLockRepository(store: AppLockStore, pinHasher: PinHasher): AppLockRepository{
+        return AppLockRepositoryImpl(store, pinHasher)
     }
 
     @Provides

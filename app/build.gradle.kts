@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodule.compose)
+    implementation(libs.androidx.lifecycle.process)
 
     implementation(libs.hilt.android)
     implementation(libs.firebase.auth)
@@ -136,6 +137,9 @@ dependencies {
     implementation(libs.datastore.preferences)
 
     implementation(libs.kotlin.serialization)
+
+    implementation(libs.androidx.biometric)
+    implementation(libs.tink.android)
 
     debugImplementation(libs.androidx.ui.tooling)
 

@@ -146,21 +146,23 @@ fun DataSettingsScreen(
                 }
 
                 ListItem(
-                    headlineContent = { Text("Удалить все данные") },
-                    leadingContent = {
-                        Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
-                    },
-                    modifier = Modifier.clickable { viewModel.clearData() }
-                )
-                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-
-                ListItem(
                     headlineContent = { Text("Синхронизировать данные") },
                     leadingContent = {
                         Icon(Icons.Default.Sync, contentDescription = null)
                     },
                     modifier = Modifier.clickable { viewModel.syncData() }
                 )
+
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+
+                ListItem(
+                    headlineContent = { Text("Удалить все данные", color = Color.Red)},
+                    leadingContent = {
+                        Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
+                    },
+                    modifier = Modifier.clickable { viewModel.clearData() }
+                )
+
                 HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
             }
         }
