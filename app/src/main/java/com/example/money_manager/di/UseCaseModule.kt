@@ -4,6 +4,7 @@ import com.example.money_manager.domain.repository.CategoryRepository
 import com.example.money_manager.domain.repository.FirebaseCategoryRepository
 import com.example.money_manager.domain.repository.FirebaseTransactionRepository
 import com.example.money_manager.domain.repository.TransactionRepository
+import com.example.money_manager.domain.usecase.category.DeleteAllCategoriesUseCase
 import com.example.money_manager.domain.usecase.category.DeleteCategoryUseCase
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
 import com.example.money_manager.domain.usecase.category.GetCategoriesByTypeUseCase
@@ -22,6 +23,7 @@ import com.example.money_manager.domain.usecase.firebase.transactions.InsertTran
 import com.example.money_manager.domain.usecase.firebase.transactions.UpdateTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
+import com.example.money_manager.domain.usecase.transaction.DeleteAllTransactionsUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
 import com.example.money_manager.domain.usecase.transaction.GetTransactionByIdUseCase
@@ -76,6 +78,12 @@ object UseCaseModule {
 
     @Provides
     @Singleton
+    fun provideDeleteAllTransactionsUseCse(repository: TransactionRepository): DeleteAllTransactionsUseCase{
+        return DeleteAllTransactionsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
     fun provideGetAllCategoriesUseCase(repository: CategoryRepository): GetAllCategoriesUseCase {
         return GetAllCategoriesUseCase(repository)
     }
@@ -108,6 +116,12 @@ object UseCaseModule {
     @Singleton
     fun provideDeleteCategoryUseCase(repository: CategoryRepository): DeleteCategoryUseCase {
         return DeleteCategoryUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteAllCategoriesUseCse(repository: CategoryRepository): DeleteAllCategoriesUseCase{
+        return DeleteAllCategoriesUseCase(repository)
     }
 
     @Provides

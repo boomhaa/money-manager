@@ -1,5 +1,6 @@
 package com.example.money_manager.presentation.viewmodel.homeviewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.data.mapper.toFirebaseDto
@@ -7,11 +8,14 @@ import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.domain.model.TransactionsSummary
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.currency.ConvertCurrencyUseCase
+import com.example.money_manager.domain.usecase.currency.GetAllCurrenciesUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.DeleteTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveCategoryListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.firebase.utlis.RemoveTransactionListenerFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.DeleteTransactionUseCase
 import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
+import com.example.money_manager.utils.PreferencesManager
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,36 +31,74 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
+    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
     private val deleteTransactionUseCase: DeleteTransactionUseCase,
     private val deleteTransactionFirebaseUseCase: DeleteTransactionFirebaseUseCase,
     private val removeTransactionListenerFirebaseUseCase: RemoveTransactionListenerFirebaseUseCase,
-    private val removeCategoryListenerFirebaseUseCase: RemoveCategoryListenerFirebaseUseCase
+    private val removeCategoryListenerFirebaseUseCase: RemoveCategoryListenerFirebaseUseCase,
+    private val convertCurrencyUseCase: ConvertCurrencyUseCase,
+    private val prefs: PreferencesManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     init {
+        loadCurrencies()
         observerTransactions()
+    }
+
+    private fun loadCurrencies() {
+        viewModelScope.launch {
+            val currencies = getAllCurrenciesUseCase()
+            _uiState.value = _uiState.value.copy(currencies = currencies)
+        }
     }
 
     private fun observerTransactions() {
         viewModelScope.launch {
             combine(
                 getAllTransactionsUseCase(),
-                getAllCategoriesUseCase()
-            ) { transactions, categories ->
+                getAllCategoriesUseCase(),
+                prefs.selectedCurrencyFlow
+            ) { transactions, categories, selectedCurrency ->
                 val transactionWithCategory = transactions.mapNotNull { transaction ->
+                    val newAmount = try {
+                        if (prefs.convertExists) {
+                            val result = convertCurrencyUseCase(
+                                Triple(
+                                    transaction.currencyCode,
+                                    selectedCurrency,
+                                    transaction.amount
+                                )
+                            )
+                            Log.d("HomeViewModel", result.getOrElse { it.message }.toString())
+                            result.getOrElse { transaction.amount }
+                        }else{
+                            transaction.amount
+                        }
+                    } catch (e: Exception) {
+                        _uiState.value = _uiState.value.copy(error = e.message)
+                        transaction.amount
+                    }
                     val category = categories.find { it.id == transaction.categoryId }
-                    category?.let { TransactionWithCategory(transaction, it) }
+                    category?.let {
+                        TransactionWithCategory(
+                            transaction.copy(addAmount = newAmount),
+                            it
+                        )
+                    }
                 }
 
-                val totalIncome = transactions
-                    .filter { it.type == TransactionType.INCOME }
-                    .sumOf { it.amount }
-                val totalExpense = transactions
-                    .filter { it.type == TransactionType.EXPENSE }
-                    .sumOf { it.amount }
+
+                val totalIncome = transactionWithCategory
+                    .filter { it.transaction.type == TransactionType.INCOME }
+                    .sumOf { it.transaction.addAmount }
+
+                val totalExpense = transactionWithCategory
+                    .filter { it.transaction.type == TransactionType.EXPENSE }
+                    .sumOf { it.transaction.addAmount }
+
                 val totalBalance = totalIncome - totalExpense
 
                 TransactionsSummary(
@@ -99,6 +141,14 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(error = e.message) }
             }
         }
+    }
+
+    fun getSymbol(): String {
+        return prefs.currency.symbol
+    }
+
+    fun getTransactionSymbol(code: String): String {
+        return _uiState.value.currencies.first { it.code == code }.symbol
     }
 
     override fun onCleared() {

@@ -3,13 +3,15 @@ package com.example.money_manager.presentation.viewmodel.datasettingsviewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.data.mapper.toFirebaseDto
-import com.example.money_manager.domain.repository.CategoryRepository
-import com.example.money_manager.domain.repository.FirebaseCategoryRepository
-import com.example.money_manager.domain.repository.FirebaseTransactionRepository
-import com.example.money_manager.domain.repository.TransactionRepository
-import com.example.money_manager.domain.usecase.firebase.categories.SyncCategoriesUseCase
-import com.example.money_manager.domain.usecase.firebase.transactions.SyncTransactionsUseCase
-import com.example.money_manager.presentation.ui.screens.dataSettingsScreen.DataSettingsUiState
+import com.example.money_manager.domain.model.Currency
+import com.example.money_manager.domain.usecase.category.*
+import com.example.money_manager.domain.usecase.currency.*
+import com.example.money_manager.domain.usecase.firebase.categories.*
+import com.example.money_manager.domain.usecase.firebase.transactions.*
+import com.example.money_manager.domain.usecase.transaction.DeleteAllTransactionsUseCase
+import com.example.money_manager.domain.usecase.transaction.GetAllTransactionsUseCase
+import com.example.money_manager.domain.usecase.transaction.UpdateTransactionUseCase
+import com.example.money_manager.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,16 +21,42 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DataSettingsViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository,
-    private val categoryRepository: CategoryRepository,
-    private val firebaseTransactionRepository: FirebaseTransactionRepository,
-    private val firebaseCategoryRepository: FirebaseCategoryRepository,
+    private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
+    private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
+    private val deleteTransactionFirebaseUseCase: DeleteTransactionFirebaseUseCase,
+    private val deleteCategoryFirebaseUseCase: DeleteCategoryFirebaseUseCase,
+    private val deleteAllTransactionsUseCase: DeleteAllTransactionsUseCase,
+    private val deleteAllCategoriesUseCase: DeleteAllCategoriesUseCase,
     private val syncCategoriesUseCase: SyncCategoriesUseCase,
-    private val syncTransactionsUseCase: SyncTransactionsUseCase
+    private val syncTransactionsUseCase: SyncTransactionsUseCase,
+    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
+    private val pref: PreferencesManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DataSettingsUiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        loadCurrencies()
+    }
+
+    fun loadCurrencies() {
+        viewModelScope.launch {
+            val currencies = getAllCurrenciesUseCase()
+            _uiState.value =
+                _uiState.value.copy(selectedCurrency = pref.currency, currencies = currencies)
+        }
+    }
+
+    fun onChangeCurrency(currency: Currency, convertExisting: Boolean) {
+        viewModelScope.launch {
+            pref.convertExists = convertExisting
+            pref.currency = currency
+            _uiState.value = _uiState.value.copy(selectedCurrency = currency)
+
+        }
+    }
+
     fun syncData() {
         viewModelScope.launch {
             _uiState.value =
@@ -48,20 +76,20 @@ class DataSettingsViewModel @Inject constructor(
             _uiState.value =
                 _uiState.value.copy(isLoading = true, loadingText = "Удаляются данные...")
             try {
-                val localTransactions = transactionRepository.getAllTransactions().first()
+                val localTransactions = getAllTransactionsUseCase().first()
                 val localCategories =
-                    categoryRepository.getAllCategories().first().filter { !it.isDefault }
+                    getAllCategoriesUseCase().first().filter { !it.isDefault }
 
                 localTransactions.forEach {
-                    firebaseTransactionRepository.deleteTransactionFirebase(it.toFirebaseDto())
+                    deleteTransactionFirebaseUseCase(it.toFirebaseDto())
                 }
 
                 localCategories.forEach {
-                    firebaseCategoryRepository.deleteCategoryFirebase(it.toFirebaseDto())
+                    deleteCategoryFirebaseUseCase(it.toFirebaseDto())
                 }
 
-                transactionRepository.deleteAllTransactions()
-                categoryRepository.deleteAllCategories()
+                deleteAllTransactionsUseCase()
+                deleteAllCategoriesUseCase()
             } finally {
                 _uiState.value = _uiState.value.copy(isLoading = false)
             }

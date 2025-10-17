@@ -7,7 +7,6 @@ import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.money_manager.utils.TransactionType
-import java.util.UUID
 
 @Entity(
     tableName = "transactions",
@@ -25,8 +24,13 @@ data class TransactionEntity(
     val amount: Double,
     val type: TransactionType,
     @ColumnInfo(name = "category_id") val categoryId: Long,
+    val currencyCode: String,
     val date: Long,
     val description: String?,
     val timestamp: Long = System.currentTimeMillis()
-)
+){
+    companion object {
+        const val DEFAULT_CURRENCY_CODE = "RUS"
+    }
+}
 

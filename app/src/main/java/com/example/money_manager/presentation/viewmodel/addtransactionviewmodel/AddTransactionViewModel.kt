@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.model.Category
+import com.example.money_manager.domain.model.Currency
 import com.example.money_manager.domain.model.Transaction
 import com.example.money_manager.domain.usecase.category.GetAllCategoriesUseCase
+import com.example.money_manager.domain.usecase.currency.GetAllCurrenciesUseCase
 import com.example.money_manager.domain.usecase.firebase.transactions.InsertTransactionFirebaseUseCase
 import com.example.money_manager.domain.usecase.transaction.InsertTransactionUseCase
+import com.example.money_manager.utils.PreferencesManager
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +26,9 @@ import javax.inject.Inject
 class AddTransactionViewModel @Inject constructor(
     private val insertTransactionUseCase: InsertTransactionUseCase,
     private val getCategoriesUseCase: GetAllCategoriesUseCase,
-    private val insertTransactionFirebaseUseCase: InsertTransactionFirebaseUseCase
+    private val insertTransactionFirebaseUseCase: InsertTransactionFirebaseUseCase,
+    private val getAllCurrenciesUseCase: GetAllCurrenciesUseCase,
+    private val prefs: PreferencesManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddTransactionUiState())
@@ -31,6 +36,7 @@ class AddTransactionViewModel @Inject constructor(
 
     init {
         loadCategories()
+        loadCurrencies()
     }
 
     private fun loadCategories() {
@@ -38,6 +44,13 @@ class AddTransactionViewModel @Inject constructor(
             getCategoriesUseCase().collectLatest { categories ->
                 _uiState.value = _uiState.value.copy(categories = categories)
             }
+        }
+    }
+
+    private fun loadCurrencies(){
+        viewModelScope.launch {
+            val currencies = getAllCurrenciesUseCase()
+            _uiState.value = _uiState.value.copy(selectedCurrency = prefs.currency, currencies = currencies)
         }
     }
 
@@ -57,6 +70,10 @@ class AddTransactionViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(selectedCategory = category)
     }
 
+    fun onCurrencyChange(currency: Currency){
+        _uiState.value = _uiState.value.copy(selectedCurrency = currency)
+    }
+
     fun onDateChange(date: LocalDateTime) {
         _uiState.value = _uiState.value.copy(date = date)
     }
@@ -70,6 +87,7 @@ class AddTransactionViewModel @Inject constructor(
                         amount = amount,
                         globalId = UUID.randomUUID().toString(),
                         type = _uiState.value.transactionType,
+                        currencyCode = _uiState.value.selectedCurrency!!.code,
                         categoryId = _uiState.value.selectedCategory!!.id,
                         date = _uiState.value.date,
                         description = _uiState.value.description.ifEmpty { null }

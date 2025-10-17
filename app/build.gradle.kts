@@ -95,7 +95,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.firebase.auth)
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation(libs.play.services.auth)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
@@ -107,6 +107,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

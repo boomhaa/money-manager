@@ -7,9 +7,11 @@ import java.time.LocalDateTime
 data class Transaction(
     val id: Long = 0,
     val globalId: String = "",
-    val amount: Double = 0.0,
+    var amount: Double = 0.0,
+    var addAmount: Double = 0.0,
     val type: TransactionType = TransactionType.EXPENSE,
     val categoryId: Long = 0,
+    val currencyCode: String = "RUB",
     val date: LocalDateTime = LocalDateTime.now(),
     val description: String? = null,
     val timestamp: LocalDateTime = LocalDateTime.now()

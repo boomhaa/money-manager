@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,6 +38,7 @@ import com.example.money_manager.presentation.components.AmountTextField
 import com.example.money_manager.presentation.components.BeautifulButton
 import com.example.money_manager.presentation.components.BeautifulCard
 import com.example.money_manager.presentation.components.CategoryDropdown
+import com.example.money_manager.presentation.components.CurrencyDropdown
 import com.example.money_manager.presentation.components.TransactionTypeSelector
 import com.example.money_manager.presentation.components.DatePickerField
 import com.example.money_manager.presentation.viewmodel.addtransactionviewmodel.AddTransactionViewModel
@@ -98,9 +100,12 @@ fun AddTransactionScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    scrolledContainerColor = Color.Unspecified,
+                    navigationIconContentColor = Color.Unspecified,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = Color.Unspecified
                 )
             )
         },
@@ -151,6 +156,13 @@ fun AddTransactionScreen(
                     DatePickerField(
                         selectedDate = uiState.value.date,
                         onDateSelected = viewModel::onDateChange,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    CurrencyDropdown(
+                        currencies = uiState.value.currencies,
+                        selectedCurrency = uiState.value.selectedCurrency,
+                        onCategorySelected = viewModel::onCurrencyChange,
                         modifier = Modifier.fillMaxWidth()
                     )
 
