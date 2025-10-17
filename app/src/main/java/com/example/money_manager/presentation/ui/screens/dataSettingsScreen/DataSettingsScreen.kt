@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.money_manager.domain.model.Currency
+import com.example.money_manager.presentation.components.AlertDialog
 import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.presentation.viewmodel.datasettingsviewmodel.DataSettingsViewModel
 
@@ -164,41 +165,24 @@ fun DataSettingsScreen(
             }
         }
 
-        if (showConvertDialog) {
-            AlertDialog(
-                onDismissRequest = { showConvertDialog = false },
-                title = { Text("Сменить валюту") },
-                text = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Checkbox(
-                            checked = convertChecker,
-                            onCheckedChange = { convertChecker = it })
-                        Text("Перевести суммы транзакций по текущему курсу?")
-                    }
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            pendingCurrency?.let { currency ->
-                                viewModel.onChangeCurrency(currency, convertChecker)
-                            }
-                            showConvertDialog = false
-                        }
-                    ) { Text(text = "Применить") }
-                },
-                dismissButton = {
-                    TextButton(onClick = {
-                        showConvertDialog = false
-                        convertChecker = false
-                    }) {
-                        Text(text = "Отмена")
-                    }
-                }
-            )
-        }
+
+        AlertDialog(
+            visible = showConvertDialog,
+            onDismissRequest = { showConvertDialog = false },
+            title = "Сменить валюту",
+            message = "",
+            icon = Icons.Default.CurrencyExchange,
+            confirmText = "Применить",
+            dismissText = "Отмена",
+            showCheckbox = true,
+            checkboxLabel = "Перевести суммы транзакций по текщему курсу",
+            checked = convertChecker,
+            onCheckedChange = {convertChecker = it},
+            onConfirm = {
+                pendingCurrency?.let { currency -> viewModel.onChangeCurrency(currency, convertChecker) }
+                showConvertDialog = false
+            }
+        )
 
 
         if (uiState.value.isLoading) {
