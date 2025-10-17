@@ -28,11 +28,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.app.Activity
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.fragment.app.FragmentActivity
+import com.example.money_manager.utils.BiometricStatus
+import com.example.money_manager.utils.buildEnrollIntent
+import com.example.money_manager.utils.checkBiometricStatus
+import com.example.money_manager.utils.launchBiometricPrompt
 import kotlinx.coroutines.launch
 
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun AppLockScreen(
     modifier: Modifier = Modifier,
@@ -44,6 +51,7 @@ fun AppLockScreen(
     val haptics = LocalHapticFeedback.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
+    val ctx = LocalContext.current
 
     var shake by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
@@ -162,10 +170,42 @@ fun AppLockScreen(
                     onBackspace = { viewModel.onBackspace() },
                     onLongBackspace = { viewModel.onClearAll() },
                     bottomLeftContent = {
-                        if (state.canUseBiometrics) {
-                            TextButton(onClick = { viewModel.onBiometricClick() }) {
-                                Text("Биометрия")
+                        val status = remember { checkBiometricStatus(ctx) }
+                        when (status) {
+                            is BiometricStatus.Available -> {
+                                TextButton(onClick = {
+                                    val act = ctx.findFragmentActivity()
+                                    if (act == null) {
+                                        scope.launch { snackbar.showSnackbar("Не удалось получить Activity. Введите PIN.") }
+                                        viewModel.onBiometricFallback()
+                                    } else {
+                                        launchBiometricPrompt(
+                                            activity = act,
+                                            onSuccess = { viewModel.onBiometricSuccess() },
+                                            onFallbackToPin = { reason ->
+                                                viewModel.onBiometricFallback()
+                                                scope.launch { snackbar.showSnackbar(reason) }
+                                            },
+                                            onError = { msg ->
+                                                viewModel.onBiometricError(msg)
+                                                scope.launch { snackbar.showSnackbar("Биометрия: $msg") }
+                                            }
+                                        )
+                                    }
+                                }) { Text("Биометрия") }
                             }
+                            is BiometricStatus.NoneEnrolled -> {
+                                TextButton(onClick = {
+                                    val act = ctx.findFragmentActivity()
+                                    if (act != null) act.startActivity(buildEnrollIntent())
+                                    else scope.launch { snackbar.showSnackbar("Настройте биометрию в настройках устройства") }
+                                }) { Text("Настроить") }
+                            }
+                            is BiometricStatus.NoHardware -> Text("Нет датчика", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            is BiometricStatus.HardwareUnavailable -> Text("Датчик недоступен", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            is BiometricStatus.SecurityUpdateRequired ->
+                                Text("Нужен апдейт безопасности", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            is BiometricStatus.Error -> Text(status.message, color = MaterialTheme.colorScheme.error)
                         }
                     }
                 )
@@ -195,4 +235,13 @@ private fun Context.findActivityOrNull(): FragmentActivity? = when (this) {
     is FragmentActivity -> this
     is Activity -> null
     else -> null
+}
+
+fun Context.findFragmentActivity(): FragmentActivity? {
+    var ctx = this
+    while (ctx is android.content.ContextWrapper) {
+        if (ctx is FragmentActivity) return ctx
+        ctx = ctx.baseContext
+    }
+    return null
 }
