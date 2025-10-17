@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.money_manager.domain.model.Currency
 import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.presentation.viewmodel.datasettingsviewmodel.DataSettingsViewModel
 
@@ -36,6 +37,10 @@ fun DataSettingsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     var showCurrencyDropdown by remember { mutableStateOf(false) }
+
+    var showConvertDialog by remember { mutableStateOf(false) }
+    var convertChecker by remember { mutableStateOf(false) }
+    var pendingCurrency by remember { mutableStateOf<Currency?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -130,7 +135,8 @@ fun DataSettingsScreen(
                                     }
                                 },
                                 onClick = {
-                                    viewModel.onChangeCurrency(currency)
+                                    pendingCurrency = currency
+                                    showConvertDialog = true
                                     showCurrencyDropdown = false
                                 }
                             )
@@ -158,6 +164,41 @@ fun DataSettingsScreen(
             }
         }
 
+        if (showConvertDialog) {
+            AlertDialog(
+                onDismissRequest = { showConvertDialog = false },
+                title = { Text("Сменить валюту") },
+                text = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Checkbox(
+                            checked = convertChecker,
+                            onCheckedChange = { convertChecker = it })
+                        Text("Перевести суммы транзакций по текущему курсу?")
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            pendingCurrency?.let { currency ->
+                                viewModel.onChangeCurrency(currency, convertChecker)
+                            }
+                            showConvertDialog = false
+                        }
+                    ) { Text(text = "Применить") }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showConvertDialog = false
+                        convertChecker = false
+                    }) {
+                        Text(text = "Отмена")
+                    }
+                }
+            )
+        }
 
 
         if (uiState.value.isLoading) {

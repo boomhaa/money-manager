@@ -23,6 +23,8 @@ class PreferencesManager @Inject constructor(
         const val IS_GUEST = "is_guest"
         const val IS_AUTHORIZED = "is_authorized"
         const val CURRENCY = "selected_currency"
+
+        const val CONVERT_EXISTS = "convert_exists"
     }
 
     var isGuest: Boolean
@@ -61,4 +63,8 @@ class PreferencesManager @Inject constructor(
 
         awaitClose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }.distinctUntilChanged()
+
+    var convertExists: Boolean
+        get() = prefs.getBoolean(CONVERT_EXISTS, true)
+        set(value) = prefs.edit { putBoolean(CONVERT_EXISTS, value) }
 }

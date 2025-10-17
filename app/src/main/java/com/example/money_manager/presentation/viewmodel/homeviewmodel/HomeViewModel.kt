@@ -48,12 +48,13 @@ class HomeViewModel @Inject constructor(
         observerTransactions()
     }
 
-    private fun loadCurrencies(){
+    private fun loadCurrencies() {
         viewModelScope.launch {
             val currencies = getAllCurrenciesUseCase()
             _uiState.value = _uiState.value.copy(currencies = currencies)
         }
     }
+
     private fun observerTransactions() {
         viewModelScope.launch {
             combine(
@@ -63,21 +64,30 @@ class HomeViewModel @Inject constructor(
             ) { transactions, categories, selectedCurrency ->
                 val transactionWithCategory = transactions.mapNotNull { transaction ->
                     val newAmount = try {
-                        val result = convertCurrencyUseCase(
-                            Triple(
-                                transaction.currencyCode,
-                                selectedCurrency,
-                                transaction.amount
+                        if (prefs.convertExists) {
+                            val result = convertCurrencyUseCase(
+                                Triple(
+                                    transaction.currencyCode,
+                                    selectedCurrency,
+                                    transaction.amount
+                                )
                             )
-                        )
-                        Log.d("HomeViewModel", result.getOrElse { it.message }.toString())
-                        result.getOrElse { transaction.amount }
-                    }catch (e: Exception){
+                            Log.d("HomeViewModel", result.getOrElse { it.message }.toString())
+                            result.getOrElse { transaction.amount }
+                        }else{
+                            transaction.amount
+                        }
+                    } catch (e: Exception) {
                         _uiState.value = _uiState.value.copy(error = e.message)
                         transaction.amount
                     }
                     val category = categories.find { it.id == transaction.categoryId }
-                    category?.let { TransactionWithCategory(transaction.copy(addAmount = newAmount), it) }
+                    category?.let {
+                        TransactionWithCategory(
+                            transaction.copy(addAmount = newAmount),
+                            it
+                        )
+                    }
                 }
 
 
@@ -133,11 +143,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getSymbol(): String{
+    fun getSymbol(): String {
         return prefs.currency.symbol
     }
 
-    fun getTransactionSymbol(code: String): String{
+    fun getTransactionSymbol(code: String): String {
         return _uiState.value.currencies.first { it.code == code }.symbol
     }
 
