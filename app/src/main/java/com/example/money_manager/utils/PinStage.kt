@@ -6,3 +6,5 @@ enum class PinStage {
     EnterNew,
     ConfirmNew
 }
+
+//Pair Extraordinaire achievement
