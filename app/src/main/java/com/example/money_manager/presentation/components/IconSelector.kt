@@ -1,14 +1,14 @@
 package com.example.money_manager.presentation.components
 
 import androidx.compose.foundation.background
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.money_manager.utils.toImageVector
+import com.example.money_manager.utils.helpers.toImageVector
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues

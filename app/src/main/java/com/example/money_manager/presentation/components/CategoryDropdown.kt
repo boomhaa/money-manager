@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.presentation.navigation.Screens
 import com.example.money_manager.utils.TransactionType
-import com.example.money_manager.utils.toImageVector
+import com.example.money_manager.utils.helpers.toImageVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

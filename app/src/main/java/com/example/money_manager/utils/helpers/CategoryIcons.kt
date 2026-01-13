@@ -1,10 +1,11 @@
-package com.example.money_manager.utils
+package com.example.money_manager.utils.helpers
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.money_manager.domain.model.IconCategory
+import com.example.money_manager.utils.TransactionType
 
 enum class CategoryIcons {
     Restaurant,

@@ -1,5 +1,7 @@
 package com.example.money_manager.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewMo
 import com.example.money_manager.utils.TransactionType
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
+@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun AppNavigation(
     googleSignInClient: GoogleSignInClient,

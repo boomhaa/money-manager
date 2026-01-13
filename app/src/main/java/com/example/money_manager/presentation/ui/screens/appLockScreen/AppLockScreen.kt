@@ -32,10 +32,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.fragment.app.FragmentActivity
-import com.example.money_manager.utils.BiometricStatus
-import com.example.money_manager.utils.buildEnrollIntent
-import com.example.money_manager.utils.checkBiometricStatus
-import com.example.money_manager.utils.launchBiometricPrompt
+import com.example.money_manager.utils.helpers.BiometricStatus
+import com.example.money_manager.utils.helpers.buildEnrollIntent
+import com.example.money_manager.utils.helpers.checkBiometricStatus
+import com.example.money_manager.utils.helpers.launchBiometricPrompt
 import kotlinx.coroutines.launch
 
 

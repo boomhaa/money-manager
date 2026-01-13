@@ -29,9 +29,8 @@ import com.example.money_manager.presentation.components.BeautifulCard
 import com.example.money_manager.presentation.components.BurgerMenu
 import com.example.money_manager.presentation.components.DatePickerField
 import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthUiState
-import com.example.money_manager.presentation.viewmodel.authviewmodel.AuthViewModel
 import com.example.money_manager.utils.ScreenMenuList
-import com.example.money_manager.utils.generateColor
+import com.example.money_manager.utils.helpers.generateColor
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 

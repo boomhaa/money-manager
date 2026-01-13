@@ -18,7 +18,7 @@ import com.example.money_manager.domain.model.TransactionWithCategory
 import com.example.money_manager.presentation.theme.Success500
 import com.example.money_manager.presentation.theme.Error500
 import com.example.money_manager.utils.TransactionType
-import com.example.money_manager.utils.toImageVector
+import com.example.money_manager.utils.helpers.toImageVector
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("DefaultLocale")

@@ -1,4 +1,4 @@
-package com.example.money_manager.utils
+package com.example.money_manager.utils.helpers
 
 import androidx.compose.ui.graphics.Color
 import kotlin.random.Random

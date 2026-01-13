@@ -2,7 +2,7 @@ package com.example.money_manager.domain.model
 
 import com.example.money_manager.utils.TransactionType
 import android.os.Parcelable
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

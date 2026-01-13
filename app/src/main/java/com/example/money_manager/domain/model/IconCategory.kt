@@ -1,6 +1,6 @@
 package com.example.money_manager.domain.model
 
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 
 data class IconCategory(
     val name: String,

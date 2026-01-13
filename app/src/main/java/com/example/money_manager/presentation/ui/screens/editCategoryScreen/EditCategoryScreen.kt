@@ -35,7 +35,7 @@ import com.example.money_manager.presentation.components.BeautifulTextField
 import com.example.money_manager.presentation.components.IconSelector
 import com.example.money_manager.presentation.components.TransactionTypeSelector
 import com.example.money_manager.presentation.viewmodel.editcategoryviewmdel.EditCategoryViewModel
-import com.example.money_manager.utils.iconsForType
+import com.example.money_manager.utils.helpers.iconsForType
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

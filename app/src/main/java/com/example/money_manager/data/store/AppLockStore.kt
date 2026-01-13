@@ -7,8 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.money_manager.utils.fromBase64
-import com.example.money_manager.utils.toBase64
+import com.example.money_manager.utils.helpers.fromBase64
+import com.example.money_manager.utils.helpers.toBase64
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first

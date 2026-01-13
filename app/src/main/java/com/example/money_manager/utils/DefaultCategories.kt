@@ -1,6 +1,7 @@
 package com.example.money_manager.utils
 
 import com.example.money_manager.data.local.entity.CategoryEntity
+import com.example.money_manager.utils.helpers.CategoryIcons
 import java.util.UUID
 
 object DefaultCategories {

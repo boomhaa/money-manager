@@ -1,7 +1,7 @@
 package com.example.money_manager.presentation.viewmodel.editcategoryviewmdel
 
 import com.example.money_manager.domain.model.Category
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 
 data class EditCategoryUiState(

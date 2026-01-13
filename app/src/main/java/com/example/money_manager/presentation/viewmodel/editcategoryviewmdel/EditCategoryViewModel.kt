@@ -6,7 +6,7 @@ import com.example.money_manager.data.mapper.toFirebaseDto
 import com.example.money_manager.domain.usecase.category.GetCategoryByIdUseCase
 import com.example.money_manager.domain.usecase.category.UpdateCategoryUseCase
 import com.example.money_manager.domain.usecase.firebase.categories.UpdateCategoryFirebaseUseCase
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

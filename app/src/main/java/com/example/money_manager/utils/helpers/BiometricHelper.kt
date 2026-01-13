@@ -1,4 +1,4 @@
-package com.example.money_manager.utils
+package com.example.money_manager.utils.helpers
 
 import android.content.Context
 import android.content.Intent

@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.money_manager.presentation.components.IconCategorySection
-import com.example.money_manager.utils.getIconsByCategory
+import com.example.money_manager.utils.helpers.getIconsByCategory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -3,7 +3,7 @@ package com.example.money_manager.data.mapper
 import com.example.money_manager.data.local.entity.CategoryEntity
 import com.example.money_manager.domain.model.Category
 import com.example.money_manager.domain.model.FirebaseCategory
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 
 fun CategoryEntity.toCategory(): Category {

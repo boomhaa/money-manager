@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.money_manager.utils.CategoryIcons
-import com.example.money_manager.utils.toImageVector
+import com.example.money_manager.utils.helpers.CategoryIcons
+import com.example.money_manager.utils.helpers.toImageVector
 
 @Composable
 fun IconCategorySection(

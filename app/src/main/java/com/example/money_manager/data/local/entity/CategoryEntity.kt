@@ -3,7 +3,7 @@ package com.example.money_manager.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.money_manager.utils.CategoryIcons
+import com.example.money_manager.utils.helpers.CategoryIcons
 import com.example.money_manager.utils.TransactionType
 
 @Entity(tableName = "categories")
